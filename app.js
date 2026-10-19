@@ -1,8 +1,8 @@
 // ==========================================
-// 1. SUPABASE SETUP (TUKAR BAHAGIAN INI!)
+// 1. SUPABASE SETUP
 // ==========================================
-const SUPABASE_URL = 'https://dozlycklbchehbbzfijl.supabase.co'; // <-- Tampal URL anda di sini
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRvemx5Y2tsYmNoZWhiYnpmaWpsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIzOTk4NzQsImV4cCI6MjEwNzk3NTg3NH0.tvtGUEQYPA75nBL2KtSJSUqoWcBR5fyObFtvIydK0vc';     // <-- Tampal Anon Key anda di sini
+const SUPABASE_URL = 'https://dozlycklbchehbbzfjl.supabase.co'; 
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRvemx5Y2tsYmNoZWhiYnpmaWpsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIzOTk4NzQsImV4cCI6MjEwNzk3NTg3NH0.tvtGUEQYPA75nBL2KtSJSUqoWcBR5fyObFtvIydK0vc'; 
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // ==========================================
@@ -115,16 +115,19 @@ window.payAndProcess = async function() {
 
   const orderData = {
     buyer_name: buyerName,
-    items: state.cart.map(i => ({ name: i.name, qty: i.qty, price: i.price })),
+    items: state.cart.map(i => ({ 
+      name: i.name, 
+      qty: i.qty, 
+      price: i.price,
+      image: i.image 
+    })),
     total_price: totalPrice
   };
 
   try {
-    // Hantar ke Supabase
     const { error } = await supabaseClient.from('orders').insert([orderData]);
     if (error) throw error;
 
-    // Berjaya!
     state.coins += totalPrice;
     saveGame();
     updateHeader();
@@ -134,7 +137,6 @@ window.payAndProcess = async function() {
     document.getElementById('successScreen').classList.add('active');
     document.getElementById('earnedCoins').textContent = `RM ${totalPrice}`;
     
-    // Reset cart
     state.cart = [];
     updateHeader();
 

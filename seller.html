@@ -4,7 +4,6 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <title>Main Jual-jual - Seller Dashboard</title>
-  <!-- Masukkan Supabase Library -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     body { font-family: sans-serif; background: #2C2224; color: white; padding: 20px; margin: 0; }
@@ -12,26 +11,33 @@
     .order-card { background: #3E3134; border-radius: 15px; padding: 15px; margin-bottom: 15px; border-left: 5px solid #FF85A2; }
     .order-card.new { border-left-color: #28a745; animation: pulse 1s infinite alternate; }
     @keyframes pulse { from { opacity: 1; } to { opacity: 0.7; } }
-    .buyer-name { font-size: 18px; font-weight: bold; color: #FFB6C1; margin-bottom: 5px; }
-    .item-list { font-size: 14px; margin-bottom: 10px; color: #ddd; }
-    .total { font-size: 16px; font-weight: bold; color: #DAA520; margin-bottom: 10px; }
-    .status-btn { background: #FF85A2; color: white; border: none; padding: 10px; border-radius: 8px; width: 100%; font-weight: bold; cursor: pointer; }
+    .buyer-name { font-size: 18px; font-weight: bold; color: #FFB6C1; margin-bottom: 10px; border-bottom: 1px solid #55464A; padding-bottom: 5px; }
+    
+    /* Gaya untuk Senarai Item dengan Gambar */
+    .order-items-container { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; }
+    .order-item { display: flex; align-items: center; gap: 10px; background: #4A3B3F; padding: 8px; border-radius: 10px; }
+    .order-item img { width: 45px; height: 45px; object-fit: contain; background: white; border-radius: 8px; }
+    .order-item-info { flex: 1; }
+    .order-item-name { font-size: 14px; font-weight: bold; }
+    .order-item-qty { font-size: 12px; color: #bbb; }
+    
+    .total { font-size: 16px; font-weight: bold; color: #DAA520; margin-bottom: 15px; text-align: right; }
+    .status-btn { background: #FF85A2; color: white; border: none; padding: 12px; border-radius: 8px; width: 100%; font-weight: bold; cursor: pointer; font-size: 15px; }
     .status-btn.done { background: #28a745; cursor: default; }
     .empty { text-align: center; color: gray; margin-top: 50px; }
   </style>
 </head>
 <body>
-  <h1>🛒 Main Jual-jual (Seller)</h1>
+  <h1>🛒 Main Jual-jual</h1>
   <div id="ordersList">
     <p class="empty">Waiting for orders...</p>
   </div>
 
   <script>
-    // TUKAR BAHAGIAN INI DENGAN URL DAN KEY ANDA
-    const SUPABASE_URL = 'https://dozlycklbchehbbzfijl.supabase.co'; // <-- Tampal URL anda di sini
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRvemx5Y2tsYmNoZWhiYnpmaWpsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIzOTk4NzQsImV4cCI6MjEwNzk3NTg3NH0.tvtGUEQYPA75nBL2KtSJSUqoWcBR5fyObFtvIydK0vc';     // <-- Tampal Anon Key anda di sini
+    const SUPABASE_URL = 'https://dozlycklbchehbbzfjl.supabase.co'; 
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRvemx5Y2tsYmNoZWhiYnpmaWpsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIzOTk4NzQsImV4cCI6MjEwNzk3NTg3NH0.tvtGUEQYPA75nBL2KtSJSUqoWcBR5fyObFtvIydK0vc'; 
+    
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
     const ordersList = document.getElementById('ordersList');
 
     async function fetchOrders() {
@@ -48,13 +54,29 @@
       }
 
       ordersList.innerHTML = data.map(order => {
-        const itemsText = order.items.map(i => `${i.qty}x ${i.name}`).join(', ');
         const isDone = order.status === 'done';
+        
+        // Bina senarai item dengan gambar
+        const itemsHtml = order.items.map(i => {
+          const imgSrc = i.image ? i.image : 'https://via.placeholder.com/45?text=?';
+          return `
+            <div class="order-item">
+              <img src="${imgSrc}" alt="${i.name}" onerror="this.src='https://via.placeholder.com/45?text=?'">
+              <div class="order-item-info">
+                <div class="order-item-name">${i.name}</div>
+                <div class="order-item-qty">Qty: ${i.qty} | Harga: RM ${i.price}</div>
+              </div>
+            </div>
+          `;
+        }).join('');
+
         return `
           <div class="order-card ${isDone ? '' : 'new'}">
             <div class="buyer-name">👤 ${order.buyer_name}</div>
-            <div class="item-list">📦 ${itemsText}</div>
-            <div class="total">💰 Total: RM ${order.total_price}</div>
+            <div class="order-items-container">
+              ${itemsHtml}
+            </div>
+            <div class="total">Total: RM ${order.total_price}</div>
             <button class="status-btn ${isDone ? 'done' : ''}" onclick="markDone(${order.id})" ${isDone ? 'disabled' : ''}>
               ${isDone ? '✅ Completed' : 'Mark as Done'}
             </button>
