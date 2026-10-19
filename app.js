@@ -1,13 +1,13 @@
 // ==========================================
-// 1. DATA GAME (Harga Nombor Bulat, Tiada Sen)
+// 1. GAME DATA (Whole Numbers, No Cents)
 // ==========================================
 const gameData = {
   categories: [
-    { id: "toys", name: "🧸 Squishy Toys" },
-    { id: "food", name: "🍔 Squishy Food" } 
+    { id: "toys", name: "🧸 Squishy" },
+    { id: "food", name: "🍔 Food" } 
   ],
   items: [
-    // --- Item 1 hingga 10 ---
+    // --- Items 1 to 10 ---
     { id: 1, cat: "toys", name: "Rainbow Ice Cream", price: 3, image: "item1.png" },
     { id: 2, cat: "toys", name: "Green Bear Pillow", price: 4, image: "item2.png" },
     { id: 3, cat: "toys", name: "Red Star Pillow", price: 4, image: "item3.png" },
@@ -19,7 +19,7 @@ const gameData = {
     { id: 9, cat: "toys", name: "Strawberry Butter", price: 5, image: "item9.png" }, 
     { id: 10, cat: "toys", name: "Pink iPad", price: 6, image: "item10.png" }, 
     
-    // --- Item 11 hingga 20 ---
+    // --- Items 11 to 20 ---
     { id: 11, cat: "toys", name: "Self Love Loops", price: 2, image: "item11.png" },
     { id: 12, cat: "toys", name: "Neko Squishy", price: 3, image: "item12.png" },
     { id: 13, cat: "toys", name: "Honey Cake", price: 5, image: "item13.png" },
@@ -34,7 +34,7 @@ const gameData = {
 };
 
 // ==========================================
-// 2. STATE GAME
+// 2. GAME STATE
 // ==========================================
 let state = {
   coins: 0,
@@ -47,7 +47,7 @@ let state = {
 };
 
 // ==========================================
-// 3. FUNGSI UTAMA
+// 3. MAIN FUNCTIONS
 // ==========================================
 
 function saveGame() {
@@ -99,7 +99,7 @@ window.changeCategory = function(catId) {
 };
 
 // ==========================================
-// 4. LOGIK TROLI (CART)
+// 4. CART LOGIC
 // ==========================================
 
 window.addToCart = function(itemId) {
@@ -118,7 +118,7 @@ window.addToCart = function(itemId) {
 };
 
 window.openCart = function() {
-  if (state.cart.length === 0) return alert("Troli kosong! Pilih squishy dulu.");
+  if (state.cart.length === 0) return alert("Cart is empty! Pick a squishy first.");
   
   const list = document.getElementById('cartList');
   const total = document.getElementById('cartTotalPrice');
@@ -166,7 +166,7 @@ window.closeCart = function() {
 };
 
 // ==========================================
-// 5. LOGIK BAYAR & PROSES
+// 5. PAY & PROCESS LOGIC
 // ==========================================
 
 window.payAndProcess = function() {
@@ -197,7 +197,7 @@ function processNextItem() {
   
   document.getElementById('craftImage').src = state.currentItem.image;
   document.getElementById('craftName').textContent = state.currentItem.name;
-  document.getElementById('craftStatus').textContent = "Menguli...";
+  document.getElementById('craftStatus').textContent = "Kneading...";
   document.getElementById('progressBar').style.width = "0%";
 
   let progress = 0;
@@ -209,8 +209,8 @@ function processNextItem() {
     progress += step;
     document.getElementById('progressBar').style.width = `${Math.min(progress, 100)}%`;
 
-    if (progress > 30 && progress < 60) document.getElementById('craftStatus').textContent = "Membentuk...";
-    if (progress >= 60 && progress < 90) document.getElementById('craftStatus').textContent = "Membungkus...";
+    if (progress > 30 && progress < 60) document.getElementById('craftStatus').textContent = "Shaping...";
+    if (progress >= 60 && progress < 90) document.getElementById('craftStatus').textContent = "Packaging...";
 
     if (progress >= 100) {
       clearInterval(state.timer);
@@ -237,10 +237,10 @@ window.goToMenu = function() {
 };
 
 // ==========================================
-// 6. FUNGSI RESET DUIT (BARU)
+// 6. RESET MONEY FUNCTION
 // ==========================================
 window.resetCoins = function() {
-  if (confirm("Adakah anda pasti mahu reset duit ke RM 0?")) {
+  if (confirm("Are you sure you want to reset your money to RM 0?")) {
     state.coins = 0;
     saveGame();
     updateHeader();

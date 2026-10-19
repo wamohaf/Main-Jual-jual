@@ -1,27 +1,27 @@
 <!doctype html>
-<html lang="ms">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#FFB6C1">
-  <meta name="application-name" content="Kedai Squishy">
+  <meta name="application-name" content="Squishy Shop">
   <link rel="manifest" href="/manifest.webmanifest">
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
   <link rel="apple-touch-icon" sizes="192x192" href="/icon-192.png">
   <link rel="stylesheet" href="style.css">
-  <title>Kedai Squishy</title>
+  <title>Squishy Shop</title>
 </head>
 <body>
-  <!-- HEADER: Duit & Troli -->
+  <!-- HEADER: Money & Cart -->
   <header class="game-header">
     <div class="stat-box" style="display: flex; align-items: center; justify-content: space-between; width: 150px;">
       <div>
-        <span>🪙 Duit</span>
+        <span>🪙 Money</span>
         <strong id="coinDisplay">RM 0</strong>
       </div>
-      <!-- BUTANG RESET DUIT -->
-      <button onclick="resetCoins()" title="Reset Duit" style="background: rgba(255,255,255,0.3); border: none; border-radius: 8px; padding: 5px 8px; cursor: pointer; font-size: 14px;">🔄</button>
+      <!-- RESET BUTTON -->
+      <button onclick="resetCoins()" title="Reset Money" style="background: rgba(255,255,255,0.3); border: none; border-radius: 8px; padding: 5px 8px; cursor: pointer; font-size: 14px;">🔄</button>
     </div>
     
     <button id="cartBtn" class="cart-btn" onclick="openCart()">
@@ -30,58 +30,58 @@
   </header>
 
   <main>
-    <!-- SKRIN UTAMA: MENU -->
+    <!-- MAIN SCREEN: MENU -->
     <section id="menuScreen" class="screen active">
       <div class="shop-header">
-        <h1>Pilih Squishy</h1>
-        <p>Tekan butang + untuk masuk troli</p>
+        <h1>Choose Squishy</h1>
+        <p>Tap + to add to cart</p>
       </div>
       <div id="categoryTabs" class="category-tabs"></div>
       <div id="menuGrid" class="menu-grid"></div>
     </section>
 
-    <!-- SKRIN PROSES: BUAT SQUISHY -->
+    <!-- CRAFTING SCREEN -->
     <section id="craftScreen" class="screen">
       <div class="craft-card">
-        <h2 id="craftTitle">Membuat...</h2>
+        <h2 id="craftTitle">Making...</h2>
         <div class="item-preview">
           <img id="craftImage" src="" alt="Item">
         </div>
-        <h3 id="craftName">Nama Item</h3>
+        <h3 id="craftName">Item Name</h3>
         <div class="progress-container">
           <div id="progressBar" class="progress-bar"></div>
         </div>
-        <p id="craftStatus">Sila tunggu...</p>
+        <p id="craftStatus">Please wait...</p>
       </div>
     </section>
 
-    <!-- SKRIN SELESAI: JUALAN BERJAYA -->
+    <!-- SUCCESS SCREEN -->
     <section id="successScreen" class="screen">
       <div class="success-card">
-        <h2>Selesai! 🎉</h2>
-        <p>Semua pesanan telah dibungkus.</p>
+        <h2>Finished! 🎉</h2>
+        <p>All orders have been packed.</p>
         <div class="coin-earned">+ <span id="earnedCoins"></span></div>
-        <button onclick="goToMenu()" class="btn-main">Main Lagi</button>
+        <button onclick="goToMenu()" class="btn-main">Play Again</button>
       </div>
     </section>
   </main>
 
-  <!-- POPUP TROLI (CART) -->
+  <!-- CART POPUP -->
   <dialog id="cartDialog">
     <div class="modal-head">
-      <h2>🛒 Troli Anda</h2>
+      <h2>🛒 Your Cart</h2>
       <button class="close-btn" onclick="closeCart()">×</button>
     </div>
     <div id="cartList" class="cart-list">
-      <!-- Item troli akan dijana di sini -->
+      <!-- Cart items will be generated here -->
     </div>
     <div class="cart-total">
-      <span>Jumlah:</span>
+      <span>Total:</span>
       <strong id="cartTotalPrice">RM 0</strong>
     </div>
     <div class="modal-actions">
-      <button class="btn-secondary" onclick="closeCart()">Tambah Lagi</button>
-      <button class="btn-main" id="payBtn" onclick="payAndProcess()">Bayar & Buat</button>
+      <button class="btn-secondary" onclick="closeCart()">Add More</button>
+      <button class="btn-main" id="payBtn" onclick="payAndProcess()">Pay & Make</button>
     </div>
   </dialog>
 

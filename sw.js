@@ -1,4 +1,4 @@
-const CACHE = 'squishy-game-v1.7';
+const CACHE = 'squishy-game-v1.8';
 const CORE = [
   '/',
   '/index.html',
