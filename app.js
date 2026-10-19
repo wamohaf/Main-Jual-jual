@@ -7,7 +7,7 @@ const gameData = {
     { id: "food", name: "🍔 Squishy Food" } 
   ],
   items: [
-    // --- Item 1 hingga 10 (Harga dah dibundarkan) ---
+    // --- Item 1 hingga 10 ---
     { id: 1, cat: "toys", name: "Rainbow Ice Cream", price: 3, image: "item1.png" },
     { id: 2, cat: "toys", name: "Green Bear Pillow", price: 4, image: "item2.png" },
     { id: 3, cat: "toys", name: "Red Star Pillow", price: 4, image: "item3.png" },
@@ -19,7 +19,7 @@ const gameData = {
     { id: 9, cat: "toys", name: "Strawberry Butter", price: 5, image: "item9.png" }, 
     { id: 10, cat: "toys", name: "Pink iPad", price: 6, image: "item10.png" }, 
     
-    // --- Item 11 hingga 20 (Harga dah dibundarkan) ---
+    // --- Item 11 hingga 20 ---
     { id: 11, cat: "toys", name: "Self Love Loops", price: 2, image: "item11.png" },
     { id: 12, cat: "toys", name: "Neko Squishy", price: 3, image: "item12.png" },
     { id: 13, cat: "toys", name: "Honey Cake", price: 5, image: "item13.png" },
@@ -39,8 +39,8 @@ const gameData = {
 let state = {
   coins: 0,
   activeCategory: "toys",
-  cart: [], // Array untuk simpan barang dalam troli
-  queue: [], // Barang yang sedang diproses
+  cart: [], 
+  queue: [], 
   currentItem: null,
   isCrafting: false,
   timer: null
@@ -64,7 +64,6 @@ function loadGame() {
 
 function updateHeader() {
   document.getElementById('coinDisplay').textContent = `RM ${state.coins}`;
-  // Kira jumlah barang dalam troli
   const totalCartCount = state.cart.reduce((sum, item) => sum + item.qty, 0);
   document.getElementById('cartCount').textContent = totalCartCount;
 }
@@ -114,7 +113,6 @@ window.addToCart = function(itemId) {
   }
   
   updateHeader();
-  // Animasi skrin bergoyang sikit bila tekan
   document.body.style.transform = "scale(0.98)";
   setTimeout(() => document.body.style.transform = "scale(1)", 100);
 };
@@ -158,7 +156,7 @@ window.changeQty = function(id, change) {
   if (state.cart.length === 0) {
     closeCart();
   } else {
-    openCart(); // Refresh popup
+    openCart(); 
   }
   updateHeader();
 };
@@ -168,38 +166,32 @@ window.closeCart = function() {
 };
 
 // ==========================================
-// 5. LOGIK BAYAR & PROSES (CRAFTING QUEUE)
+// 5. LOGIK BAYAR & PROSES
 // ==========================================
 
 window.payAndProcess = function() {
   closeCart();
   
-  // Pindahkan semua barang dari troli ke dalam queue
   state.cart.forEach(cartItem => {
     for (let i = 0; i < cartItem.qty; i++) {
       state.queue.push(cartItem);
     }
   });
   
-  state.cart = []; // Kosongkan troli
+  state.cart = []; 
   updateHeader();
-  
-  // Mula proses pertama
   processNextItem();
 };
 
 function processNextItem() {
   if (state.queue.length === 0) {
-    // Semua dah siap
     showSuccessScreen();
     return;
   }
 
-  // Ambil item pertama dalam queue
   state.currentItem = state.queue.shift();
   state.isCrafting = true;
 
-  // Tukar skrin
   document.getElementById('menuScreen').classList.remove('active');
   document.getElementById('craftScreen').classList.add('active');
   
@@ -209,7 +201,7 @@ function processNextItem() {
   document.getElementById('progressBar').style.width = "0%";
 
   let progress = 0;
-  const duration = 1500; // 1.5 saat setiap satu (laju sikit sebab buat banyak)
+  const duration = 1500; 
   const interval = 30; 
   const step = (100 / (duration / interval));
 
@@ -222,13 +214,9 @@ function processNextItem() {
 
     if (progress >= 100) {
       clearInterval(state.timer);
-      
-      // Tambah duit
       state.coins += state.currentItem.price;
       saveGame();
       updateHeader();
-      
-      // Siap satu, buat yang seterusnya
       setTimeout(processNextItem, 300); 
     }
   }, interval);
@@ -237,7 +225,7 @@ function processNextItem() {
 function showSuccessScreen() {
   document.getElementById('craftScreen').classList.remove('active');
   document.getElementById('successScreen').classList.add('active');
-  document.getElementById('earnedCoins').textContent = `RM ${state.coins}`; // Tunjuk total duit semasa
+  document.getElementById('earnedCoins').textContent = `RM ${state.coins}`; 
 }
 
 window.goToMenu = function() {
@@ -249,7 +237,18 @@ window.goToMenu = function() {
 };
 
 // ==========================================
-// 6. INITIALIZATION
+// 6. FUNGSI RESET DUIT (BARU)
+// ==========================================
+window.resetCoins = function() {
+  if (confirm("Adakah anda pasti mahu reset duit ke RM 0?")) {
+    state.coins = 0;
+    saveGame();
+    updateHeader();
+  }
+};
+
+// ==========================================
+// 7. INITIALIZATION
 // ==========================================
 function init() {
   loadGame();

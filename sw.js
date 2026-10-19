@@ -1,4 +1,4 @@
-const CACHE = 'squishy-game-v1.6'; // Tukar ke v1.6
+const CACHE = 'squishy-game-v1.7';
 const CORE = [
   '/',
   '/index.html',

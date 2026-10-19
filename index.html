@@ -15,10 +15,15 @@
 <body>
   <!-- HEADER: Duit & Troli -->
   <header class="game-header">
-    <div class="stat-box">
-      <span>🪙 Duit</span>
-      <strong id="coinDisplay">RM 0</strong>
+    <div class="stat-box" style="display: flex; align-items: center; justify-content: space-between; width: 150px;">
+      <div>
+        <span>🪙 Duit</span>
+        <strong id="coinDisplay">RM 0</strong>
+      </div>
+      <!-- BUTANG RESET DUIT -->
+      <button onclick="resetCoins()" title="Reset Duit" style="background: rgba(255,255,255,0.3); border: none; border-radius: 8px; padding: 5px 8px; cursor: pointer; font-size: 14px;">🔄</button>
     </div>
+    
     <button id="cartBtn" class="cart-btn" onclick="openCart()">
       🛒 <span id="cartCount" class="cart-badge">0</span>
     </button>
