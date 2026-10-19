@@ -13,16 +13,15 @@
   <title>Kedai Squishy</title>
 </head>
 <body>
-  <!-- HEADER: Duit & Stok -->
+  <!-- HEADER: Duit & Troli -->
   <header class="game-header">
     <div class="stat-box">
       <span>🪙 Duit</span>
-      <strong id="coinDisplay">RM 0.00</strong>
+      <strong id="coinDisplay">RM 0</strong>
     </div>
-    <div class="stat-box">
-      <span>📦 Stok</span>
-      <strong id="stockDisplay">0</strong>
-    </div>
+    <button id="cartBtn" class="cart-btn" onclick="openCart()">
+      🛒 <span id="cartCount" class="cart-badge">0</span>
+    </button>
   </header>
 
   <main>
@@ -30,20 +29,16 @@
     <section id="menuScreen" class="screen active">
       <div class="shop-header">
         <h1>Pilih Squishy</h1>
-        <p>Tekan item untuk buat dan jual!</p>
+        <p>Tekan butang + untuk masuk troli</p>
       </div>
-      <div id="categoryTabs" class="category-tabs">
-        <!-- Tab kategori akan dijana oleh JS -->
-      </div>
-      <div id="menuGrid" class="menu-grid">
-        <!-- Item akan dijana oleh JS -->
-      </div>
+      <div id="categoryTabs" class="category-tabs"></div>
+      <div id="menuGrid" class="menu-grid"></div>
     </section>
 
     <!-- SKRIN PROSES: BUAT SQUISHY -->
     <section id="craftScreen" class="screen">
       <div class="craft-card">
-        <h2>Membuat...</h2>
+        <h2 id="craftTitle">Membuat...</h2>
         <div class="item-preview">
           <img id="craftImage" src="" alt="Item">
         </div>
@@ -58,13 +53,32 @@
     <!-- SKRIN SELESAI: JUALAN BERJAYA -->
     <section id="successScreen" class="screen">
       <div class="success-card">
-        <h2>Berjaya! 🎉</h2>
-        <p>Anda telah menjual <b id="soldItemName"></b>!</p>
+        <h2>Selesai! 🎉</h2>
+        <p>Semua pesanan telah dibungkus.</p>
         <div class="coin-earned">+ <span id="earnedCoins"></span></div>
         <button onclick="goToMenu()" class="btn-main">Main Lagi</button>
       </div>
     </section>
   </main>
+
+  <!-- POPUP TROLI (CART) -->
+  <dialog id="cartDialog">
+    <div class="modal-head">
+      <h2>🛒 Troli Anda</h2>
+      <button class="close-btn" onclick="closeCart()">×</button>
+    </div>
+    <div id="cartList" class="cart-list">
+      <!-- Item troli akan dijana di sini -->
+    </div>
+    <div class="cart-total">
+      <span>Jumlah:</span>
+      <strong id="cartTotalPrice">RM 0</strong>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeCart()">Tambah Lagi</button>
+      <button class="btn-main" id="payBtn" onclick="payAndProcess()">Bayar & Buat</button>
+    </div>
+  </dialog>
 
   <script src="app.js"></script>
 </body>

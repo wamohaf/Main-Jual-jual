@@ -1,5 +1,5 @@
 // ==========================================
-// 1. DATA GAME (20 Item Penuh)
+// 1. DATA GAME (Harga Nombor Bulat, Tiada Sen)
 // ==========================================
 const gameData = {
   categories: [
@@ -7,32 +7,29 @@ const gameData = {
     { id: "food", name: "🍔 Squishy Food" } 
   ],
   items: [
-    // --- KATEGORI TOYS (Item 1 hingga 10 - Baru dikemas kini) ---
-    { id: 1, cat: "toys", name: "Rainbow Ice Cream", price: 3.00, image: "item1.png" },
-    { id: 2, cat: "toys", name: "Green Bear Pillow", price: 4.00, image: "item2.png" },
-    { id: 3, cat: "toys", name: "Red Star Pillow", price: 4.00, image: "item3.png" },
-    { id: 4, cat: "toys", name: "Sharla Cookies", price: 2.50, image: "item4.png" },
-    { id: 5, cat: "toys", name: "Drinha Orange", price: 3.50, image: "item5.png" },
-    { id: 6, cat: "toys", name: "Story Blue", price: 3.00, image: "item6.png" },
-    { id: 7, cat: "toys", name: "Nabati Wafer", price: 3.50, image: "item7.png" },
-    { id: 8, cat: "toys", name: "Pamii Bear", price: 5.00, image: "item8.png" }, 
-    { id: 9, cat: "toys", name: "Strawberry Butter", price: 4.50, image: "item9.png" }, 
-    { id: 10, cat: "toys", name: "Pink iPad", price: 6.00, image: "item10.png" }, 
+    // --- Item 1 hingga 10 (Harga dah dibundarkan) ---
+    { id: 1, cat: "toys", name: "Rainbow Ice Cream", price: 3, image: "item1.png" },
+    { id: 2, cat: "toys", name: "Green Bear Pillow", price: 4, image: "item2.png" },
+    { id: 3, cat: "toys", name: "Red Star Pillow", price: 4, image: "item3.png" },
+    { id: 4, cat: "toys", name: "Sharla Cookies", price: 3, image: "item4.png" },
+    { id: 5, cat: "toys", name: "Drinha Orange", price: 4, image: "item5.png" },
+    { id: 6, cat: "toys", name: "Story Blue", price: 3, image: "item6.png" },
+    { id: 7, cat: "toys", name: "Nabati Wafer", price: 4, image: "item7.png" },
+    { id: 8, cat: "toys", name: "Pamii Bear", price: 5, image: "item8.png" }, 
+    { id: 9, cat: "toys", name: "Strawberry Butter", price: 5, image: "item9.png" }, 
+    { id: 10, cat: "toys", name: "Pink iPad", price: 6, image: "item10.png" }, 
     
-    // --- Item 11 hingga 20 (Yang asal) ---
-    { id: 11, cat: "toys", name: "Self Love Loops", price: 2.00, image: "item11.png" },
-    { id: 12, cat: "toys", name: "Neko Squishy", price: 3.00, image: "item12.png" },
-    { id: 13, cat: "toys", name: "Honey Cake", price: 5.00, image: "item13.png" },
-    { id: 14, cat: "toys", name: "Astor Choco", price: 4.00, image: "item14.png" },
-    { id: 15, cat: "toys", name: "Options", price: 4.00, image: "item15.png" },
-    { id: 16, cat: "toys", name: "Buldak", price: 5.00, image: "item16.png" },
-    { id: 17, cat: "toys", name: "Strawberry Cake", price: 3.00, image: "item17.png" },
-    { id: 18, cat: "toys", name: "Mystery White", price: 6.00, image: "item18.png" }, 
-    { id: 19, cat: "toys", name: "Cheese Block", price: 2.00, image: "item19.png" }, 
-    { id: 20, cat: "toys", name: "Ice Cube", price: 4.00, image: "item20.png" }, 
-    
-    // --- CONTOH KATEGORI FOOD (Bila nak tambah nanti) ---
-    // { id: 21, cat: "food", name: "Burger Squishy", price: 5.00, image: "item21.png" },
+    // --- Item 11 hingga 20 (Harga dah dibundarkan) ---
+    { id: 11, cat: "toys", name: "Self Love Loops", price: 2, image: "item11.png" },
+    { id: 12, cat: "toys", name: "Neko Squishy", price: 3, image: "item12.png" },
+    { id: 13, cat: "toys", name: "Honey Cake", price: 5, image: "item13.png" },
+    { id: 14, cat: "toys", name: "Astor Choco", price: 4, image: "item14.png" },
+    { id: 15, cat: "toys", name: "Options", price: 4, image: "item15.png" },
+    { id: 16, cat: "toys", name: "Buldak", price: 5, image: "item16.png" },
+    { id: 17, cat: "toys", name: "Strawberry Cake", price: 3, image: "item17.png" },
+    { id: 18, cat: "toys", name: "Mystery White", price: 6, image: "item18.png" }, 
+    { id: 19, cat: "toys", name: "Cheese Block", price: 2, image: "item19.png" }, 
+    { id: 20, cat: "toys", name: "Ice Cube", price: 4, image: "item20.png" }, 
   ]
 };
 
@@ -42,14 +39,15 @@ const gameData = {
 let state = {
   coins: 0,
   activeCategory: "toys",
+  cart: [], // Array untuk simpan barang dalam troli
+  queue: [], // Barang yang sedang diproses
   currentItem: null,
-  progress: 0,
   isCrafting: false,
   timer: null
 };
 
 // ==========================================
-// 3. FUNGSI-FUNGSI UTAMA
+// 3. FUNGSI UTAMA
 // ==========================================
 
 function saveGame() {
@@ -65,11 +63,10 @@ function loadGame() {
 }
 
 function updateHeader() {
-  document.getElementById('coinDisplay').textContent = `RM ${state.coins.toFixed(2)}`;
-  
-  // Kira stok berdasarkan KATEGORI yang sedang aktif sahaja
-  const itemsInCategory = gameData.items.filter(i => i.cat === state.activeCategory);
-  document.getElementById('stockDisplay').textContent = itemsInCategory.length;
+  document.getElementById('coinDisplay').textContent = `RM ${state.coins}`;
+  // Kira jumlah barang dalam troli
+  const totalCartCount = state.cart.reduce((sum, item) => sum + item.qty, 0);
+  document.getElementById('cartCount').textContent = totalCartCount;
 }
 
 function renderCategories() {
@@ -86,16 +83,12 @@ function renderMenu() {
   const grid = document.getElementById('menuGrid');
   const items = gameData.items.filter(i => i.cat === state.activeCategory);
   
-  if (items.length === 0) {
-    grid.innerHTML = `<p style="grid-column: 1/-1; text-align:center; color:var(--muted); margin-top:20px;">Belum ada item untuk kategori ini.</p>`;
-    return;
-  }
-
   grid.innerHTML = items.map(item => `
-    <div class="squishy-card" onclick="startCrafting(${item.id})">
+    <div class="squishy-card">
       <img src="${item.image}" alt="${item.name}" onerror="this.src='https://via.placeholder.com/150?text=No+Image'">
       <div class="item-name">${item.name}</div>
-      <div class="item-price">RM ${item.price.toFixed(2)}</div>
+      <div class="item-price">RM ${item.price}</div>
+      <button class="add-btn" onclick="addToCart(${item.id})">+</button>
     </div>
   `).join('');
 }
@@ -104,63 +97,159 @@ window.changeCategory = function(catId) {
   state.activeCategory = catId;
   renderCategories();
   renderMenu();
+};
+
+// ==========================================
+// 4. LOGIK TROLI (CART)
+// ==========================================
+
+window.addToCart = function(itemId) {
+  const item = gameData.items.find(i => i.id === itemId);
+  const existing = state.cart.find(i => i.id === itemId);
+
+  if (existing) {
+    existing.qty += 1;
+  } else {
+    state.cart.push({ ...item, qty: 1 });
+  }
+  
+  updateHeader();
+  // Animasi skrin bergoyang sikit bila tekan
+  document.body.style.transform = "scale(0.98)";
+  setTimeout(() => document.body.style.transform = "scale(1)", 100);
+};
+
+window.openCart = function() {
+  if (state.cart.length === 0) return alert("Troli kosong! Pilih squishy dulu.");
+  
+  const list = document.getElementById('cartList');
+  const total = document.getElementById('cartTotalPrice');
+  let totalPrice = 0;
+
+  list.innerHTML = state.cart.map(item => {
+    totalPrice += (item.price * item.qty);
+    return `
+      <div class="cart-item">
+        <div class="cart-item-info">
+          <img src="${item.image}">
+          <span>${item.name} (x${item.qty})</span>
+        </div>
+        <div class="cart-item-controls">
+          <button onclick="changeQty(${item.id}, -1)">-</button>
+          <button onclick="changeQty(${item.id}, 1)">+</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  total.textContent = `RM ${totalPrice}`;
+  document.getElementById('cartDialog').showModal();
+};
+
+window.changeQty = function(id, change) {
+  const item = state.cart.find(i => i.id === id);
+  if (!item) return;
+  
+  item.qty += change;
+  if (item.qty <= 0) {
+    state.cart = state.cart.filter(i => i.id !== id);
+  }
+  
+  if (state.cart.length === 0) {
+    closeCart();
+  } else {
+    openCart(); // Refresh popup
+  }
   updateHeader();
 };
 
-window.startCrafting = function(itemId) {
-  const item = gameData.items.find(i => i.id === itemId);
-  if (!item) return;
+window.closeCart = function() {
+  document.getElementById('cartDialog').close();
+};
 
-  state.currentItem = item;
-  state.progress = 0;
+// ==========================================
+// 5. LOGIK BAYAR & PROSES (CRAFTING QUEUE)
+// ==========================================
+
+window.payAndProcess = function() {
+  closeCart();
+  
+  // Pindahkan semua barang dari troli ke dalam queue
+  state.cart.forEach(cartItem => {
+    for (let i = 0; i < cartItem.qty; i++) {
+      state.queue.push(cartItem);
+    }
+  });
+  
+  state.cart = []; // Kosongkan troli
+  updateHeader();
+  
+  // Mula proses pertama
+  processNextItem();
+};
+
+function processNextItem() {
+  if (state.queue.length === 0) {
+    // Semua dah siap
+    showSuccessScreen();
+    return;
+  }
+
+  // Ambil item pertama dalam queue
+  state.currentItem = state.queue.shift();
   state.isCrafting = true;
 
+  // Tukar skrin
   document.getElementById('menuScreen').classList.remove('active');
   document.getElementById('craftScreen').classList.add('active');
   
-  document.getElementById('craftImage').src = item.image;
-  document.getElementById('craftName').textContent = item.name;
+  document.getElementById('craftImage').src = state.currentItem.image;
+  document.getElementById('craftName').textContent = state.currentItem.name;
   document.getElementById('craftStatus').textContent = "Menguli...";
   document.getElementById('progressBar').style.width = "0%";
 
-  const duration = 2500; // 2.5 saat
-  const interval = 50; 
+  let progress = 0;
+  const duration = 1500; // 1.5 saat setiap satu (laju sikit sebab buat banyak)
+  const interval = 30; 
   const step = (100 / (duration / interval));
 
   state.timer = setInterval(() => {
-    state.progress += step;
-    document.getElementById('progressBar').style.width = `${Math.min(state.progress, 100)}%`;
+    progress += step;
+    document.getElementById('progressBar').style.width = `${Math.min(progress, 100)}%`;
 
-    if (state.progress > 30 && state.progress < 60) document.getElementById('craftStatus').textContent = "Membentuk...";
-    if (state.progress >= 60 && state.progress < 90) document.getElementById('craftStatus').textContent = "Membungkus...";
+    if (progress > 30 && progress < 60) document.getElementById('craftStatus').textContent = "Membentuk...";
+    if (progress >= 60 && progress < 90) document.getElementById('craftStatus').textContent = "Membungkus...";
 
-    if (state.progress >= 100) {
+    if (progress >= 100) {
       clearInterval(state.timer);
-      finishCrafting();
+      
+      // Tambah duit
+      state.coins += state.currentItem.price;
+      saveGame();
+      updateHeader();
+      
+      // Siap satu, buat yang seterusnya
+      setTimeout(processNextItem, 300); 
     }
   }, interval);
-};
+}
 
-function finishCrafting() {
-  state.isCrafting = false;
-  state.coins += state.currentItem.price;
-  saveGame();
-  updateHeader();
-
+function showSuccessScreen() {
   document.getElementById('craftScreen').classList.remove('active');
   document.getElementById('successScreen').classList.add('active');
-  document.getElementById('soldItemName').textContent = state.currentItem.name;
-  document.getElementById('earnedCoins').textContent = `RM ${state.currentItem.price.toFixed(2)}`;
+  document.getElementById('earnedCoins').textContent = `RM ${state.coins}`; // Tunjuk total duit semasa
 }
 
 window.goToMenu = function() {
   document.getElementById('successScreen').classList.remove('active');
   document.getElementById('menuScreen').classList.add('active');
   state.currentItem = null;
+  state.isCrafting = false;
+  renderMenu();
 };
 
 // ==========================================
-// 4. INITIALIZATION
+// 6. INITIALIZATION
 // ==========================================
 function init() {
   loadGame();
