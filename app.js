@@ -1,7 +1,7 @@
 // ==========================================
 // 1. SUPABASE SETUP (TUKAR BAHAGIAN INI!)
 // ==========================================
-const SUPABASE_URL = 'https://dozlycklbchehbbzfijl.supabase.co/rest/v1/'; // <-- Tampal URL anda di sini
+const SUPABASE_URL = 'https://dozlycklbchehbbzfijl.supabase.co'; // <-- Tampal URL anda di sini
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRvemx5Y2tsYmNoZWhiYnpmaWpsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIzOTk4NzQsImV4cCI6MjEwNzk3NTg3NH0.tvtGUEQYPA75nBL2KtSJSUqoWcBR5fyObFtvIydK0vc';     // <-- Tampal Anon Key anda di sini
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
