@@ -1,5 +1,5 @@
 // ==========================================
-// 1. DATA GAME (20 Item sahaja)
+// 1. DATA GAME
 // ==========================================
 const gameData = {
   categories: [
@@ -7,7 +7,7 @@ const gameData = {
     { id: "food", name: "🍔 Squishy Food" } 
   ],
   items: [
-    // --- KATEGORI TOYS (Item 11 hingga 20) ---
+    // --- KATEGORI TOYS (10 Item) ---
     { id: 11, cat: "toys", name: "Self Love Loops", price: 2.00, image: "item11.png" },
     { id: 12, cat: "toys", name: "Neko Squishy", price: 3.00, image: "item12.png" },
     { id: 13, cat: "toys", name: "Honey Cake", price: 5.00, image: "item13.png" },
@@ -19,7 +19,7 @@ const gameData = {
     { id: 19, cat: "toys", name: "Cheese Block", price: 2.00, image: "item19.png" }, 
     { id: 20, cat: "toys", name: "Ice Cube", price: 4.00, image: "item20.png" }, 
     
-    // --- CONTOH KATEGORI FOOD (Bila nak tambah nanti) ---
+    // --- CONTOH KATEGORI FOOD (Tambah nanti) ---
     // { id: 21, cat: "food", name: "Burger Squishy", price: 5.00, image: "item21.png" },
   ]
 };
@@ -43,6 +43,7 @@ let state = {
 function saveGame() {
   localStorage.setItem('squishyGameState', JSON.stringify({ coins: state.coins }));
 }
+
 function loadGame() {
   const saved = localStorage.getItem('squishyGameState');
   if (saved) {
@@ -53,8 +54,10 @@ function loadGame() {
 
 function updateHeader() {
   document.getElementById('coinDisplay').textContent = `RM ${state.coins.toFixed(2)}`;
-  const totalStock = gameData.items.filter(i => i.cat === state.activeCategory).length;
-  document.getElementById('stockDisplay').textContent = totalStock;
+  
+  // Kira stok berdasarkan KATEGORI yang sedang aktif sahaja
+  const itemsInCategory = gameData.items.filter(i => i.cat === state.activeCategory);
+  document.getElementById('stockDisplay').textContent = itemsInCategory.length;
 }
 
 function renderCategories() {
@@ -72,7 +75,7 @@ function renderMenu() {
   const items = gameData.items.filter(i => i.cat === state.activeCategory);
   
   if (items.length === 0) {
-    grid.innerHTML = `<p style="grid-column: 1/-1; text-align:center; color:gray;">Belum ada item.</p>`;
+    grid.innerHTML = `<p style="grid-column: 1/-1; text-align:center; color:var(--muted); margin-top:20px;">Belum ada item untuk kategori ini.</p>`;
     return;
   }
 
@@ -89,7 +92,7 @@ window.changeCategory = function(catId) {
   state.activeCategory = catId;
   renderCategories();
   renderMenu();
-  updateHeader();
+  updateHeader(); // Update stok bila tukar tab
 };
 
 window.startCrafting = function(itemId) {
@@ -108,7 +111,7 @@ window.startCrafting = function(itemId) {
   document.getElementById('craftStatus').textContent = "Menguli...";
   document.getElementById('progressBar').style.width = "0%";
 
-  const duration = 3000; 
+  const duration = 2500; // 2.5 saat
   const interval = 50; 
   const step = (100 / (duration / interval));
 

@@ -15,6 +15,7 @@ body {
   background-color: var(--bg);
   color: var(--text);
   padding-bottom: 20px;
+  transition: background-color 0.3s, color 0.3s;
 }
 
 /* HEADER STATS */
@@ -65,7 +66,7 @@ body {
   padding: 8px 18px;
   border-radius: 20px;
   border: 2px solid var(--primary);
-  background: white;
+  background: var(--card-bg); /* Guna warna kad supaya nampak dalam dark mode */
   color: var(--primary);
   font-weight: bold;
   font-size: 14px;
@@ -171,7 +172,7 @@ body {
 }
 .btn-main:active { transform: translateY(4px); box-shadow: none; }
 
-/* Dark Mode (Optional) */
+/* Dark Mode */
 @media (prefers-color-scheme: dark) {
   :root {
     --bg: #2C2224;
@@ -179,7 +180,7 @@ body {
     --text: #F0F0F0;
     --muted: #B0A0A5;
     --primary: #FF85A2;
-    --primary-dark: #E05C7C;
+    --primary-dark: #FFA6BE; /* Warna pink lebih cerah untuk teks harga */
   }
   .squishy-card img { background: #55464A; }
 }

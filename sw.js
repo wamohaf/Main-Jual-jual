@@ -1,14 +1,12 @@
-const CACHE = 'squishy-game-v1.1';
+const CACHE = 'squishy-game-v1.2'; // Tukar versi ini bila anda update kod
 const CORE = [
   '/',
   '/index.html',
   '/style.css',
   '/app.js',
   '/manifest.webmanifest',
-  // Pastikan 20 gambar ini wujud dalam folder anda
   '/item11.png', '/item12.png', '/item13.png', '/item14.png', '/item15.png',
   '/item16.png', '/item17.png', '/item18.png', '/item19.png', '/item20.png', 
-  // Ikon PWA
   '/icon-192.png', '/icon-512.png'
 ];
 
