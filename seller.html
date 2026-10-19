@@ -7,13 +7,21 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     body { font-family: sans-serif; background: #2C2224; color: white; padding: 20px; margin: 0; }
-    h1 { color: #FF85A2; text-align: center; }
+    
+    /* HEADER & TOTAL SALES */
+    .seller-header { display: flex; justify-content: space-between; align-items: center; background: #3E3134; padding: 15px; border-radius: 15px; margin-bottom: 20px; border: 1px solid #55464A; }
+    .total-sales-box span { font-size: 12px; color: #bbb; display: block; margin-bottom: 5px; }
+    .total-sales-box strong { font-size: 24px; color: #DAA520; display: block; }
+    .reset-btn { background: #ff3b30; color: white; border: none; padding: 10px 15px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 14px; transition: 0.2s; }
+    .reset-btn:active { transform: scale(0.95); }
+
+    h1 { color: #FF85A2; text-align: center; font-size: 20px; margin-top: 0; margin-bottom: 20px; }
+    
     .order-card { background: #3E3134; border-radius: 15px; padding: 15px; margin-bottom: 15px; border-left: 5px solid #FF85A2; }
     .order-card.new { border-left-color: #28a745; animation: pulse 1s infinite alternate; }
     @keyframes pulse { from { opacity: 1; } to { opacity: 0.7; } }
     .buyer-name { font-size: 18px; font-weight: bold; color: #FFB6C1; margin-bottom: 10px; border-bottom: 1px solid #55464A; padding-bottom: 5px; }
     
-    /* Gaya untuk Senarai Item dengan Gambar */
     .order-items-container { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; }
     .order-item { display: flex; align-items: center; gap: 10px; background: #4A3B3F; padding: 8px; border-radius: 10px; }
     .order-item img { width: 45px; height: 45px; object-fit: contain; background: white; border-radius: 8px; }
@@ -28,7 +36,17 @@
   </style>
 </head>
 <body>
-  <h1>🛒 Main Jual-jual</h1>
+  <!-- HEADER: TOTAL SALES & RESET -->
+  <div class="seller-header">
+    <div class="total-sales-box">
+      <span>Total Sales</span>
+      <strong id="totalSalesDisplay">RM 0</strong>
+    </div>
+    <button class="reset-btn" onclick="resetAllOrders()">🔄 Reset</button>
+  </div>
+
+  <h1>🛒 Main Jual-jual (Seller)</h1>
+  
   <div id="ordersList">
     <p class="empty">Waiting for orders...</p>
   </div>
@@ -39,6 +57,7 @@
     
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     const ordersList = document.getElementById('ordersList');
+    const totalSalesDisplay = document.getElementById('totalSalesDisplay');
 
     async function fetchOrders() {
       const { data, error } = await supabaseClient
@@ -48,6 +67,14 @@
 
       if (error) { console.error(error); return; }
 
+      // Kira Total Jualan (Hanya yang berstatus 'done')
+      const totalSales = data
+        .filter(order => order.status === 'done')
+        .reduce((sum, order) => sum + order.total_price, 0);
+      
+      totalSalesDisplay.textContent = `RM ${totalSales}`;
+
+      // Paparkan Pesanan
       if (data.length === 0) {
         ordersList.innerHTML = '<p class="empty">No orders yet.</p>';
         return;
@@ -56,7 +83,6 @@
       ordersList.innerHTML = data.map(order => {
         const isDone = order.status === 'done';
         
-        // Bina senarai item dengan gambar
         const itemsHtml = order.items.map(i => {
           const imgSrc = i.image ? i.image : 'https://via.placeholder.com/45?text=?';
           return `
@@ -85,6 +111,7 @@
       }).join('');
     }
 
+    // Fungsi Tanda Selesai
     window.markDone = async function(orderId) {
       const { error } = await supabaseClient
         .from('orders')
@@ -93,6 +120,23 @@
       
       if (error) alert("Error updating: " + error.message);
       else fetchOrders();
+    };
+
+    // Fungsi Reset Semua Pesanan
+    window.resetAllOrders = async function() {
+      if (!confirm("Adakah anda pasti mahu padam semua rekod pesanan dan reset total jualan?")) return;
+
+      // Padam semua baris dalam jadual 'orders'
+      const { error } = await supabaseClient
+        .from('orders')
+        .delete()
+        .neq('id', 0); // Teknik untuk padam semua rekod
+
+      if (error) {
+        alert("Error resetting: " + error.message);
+      } else {
+        fetchOrders(); // Refresh skrin
+      }
     };
 
     fetchOrders();
