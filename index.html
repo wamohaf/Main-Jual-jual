@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ms">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#FFB6C1">
+  <meta name="application-name" content="Kedai Squishy">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+  <link rel="apple-touch-icon" sizes="192x192" href="/icon-192.png">
+  <link rel="stylesheet" href="style.css">
+  <title>Kedai Squishy</title>
+</head>
+<body>
+  <!-- HEADER: Duit & Stok -->
+  <header class="game-header">
+    <div class="stat-box">
+      <span>🪙 Duit</span>
+      <strong id="coinDisplay">RM 0.00</strong>
+    </div>
+    <div class="stat-box">
+      <span>📦 Stok</span>
+      <strong id="stockDisplay">0</strong>
+    </div>
+  </header>
+
+  <main>
+    <!-- SKRIN UTAMA: MENU -->
+    <section id="menuScreen" class="screen active">
+      <div class="shop-header">
+        <h1>Pilih Squishy</h1>
+        <p>Tekan item untuk buat dan jual!</p>
+      </div>
+      <div id="categoryTabs" class="category-tabs">
+        <!-- Tab kategori akan dijana oleh JS -->
+      </div>
+      <div id="menuGrid" class="menu-grid">
+        <!-- Item akan dijana oleh JS -->
+      </div>
+    </section>
+
+    <!-- SKRIN PROSES: BUAT SQUISHY -->
+    <section id="craftScreen" class="screen">
+      <div class="craft-card">
+        <h2>Membuat...</h2>
+        <div class="item-preview">
+          <img id="craftImage" src="" alt="Item">
+        </div>
+        <h3 id="craftName">Nama Item</h3>
+        <div class="progress-container">
+          <div id="progressBar" class="progress-bar"></div>
+        </div>
+        <p id="craftStatus">Sila tunggu...</p>
+      </div>
+    </section>
+
+    <!-- SKRIN SELESAI: JUALAN BERJAYA -->
+    <section id="successScreen" class="screen">
+      <div class="success-card">
+        <h2>Berjaya! 🎉</h2>
+        <p>Anda telah menjual <b id="soldItemName"></b>!</p>
+        <div class="coin-earned">+ <span id="earnedCoins"></span></div>
+        <button onclick="goToMenu()" class="btn-main">Main Lagi</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

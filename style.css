@@ -1,0 +1,185 @@
+:root {
+  --bg: #FFF0F5;
+  --card-bg: #FFFFFF;
+  --primary: #FF85A2;
+  --primary-dark: #E05C7C;
+  --text: #4A3B3F;
+  --muted: #9A8C90;
+  --shadow: 0 4px 12px rgba(255, 133, 162, 0.15);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  padding-bottom: 20px;
+}
+
+/* HEADER STATS */
+.game-header {
+  display: flex;
+  justify-content: space-around;
+  padding: 15px;
+  background: linear-gradient(135deg, #FFB6C1, #FF85A2);
+  color: white;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  box-shadow: var(--shadow);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.stat-box {
+  text-align: center;
+  background: rgba(255,255,255,0.2);
+  padding: 8px 20px;
+  border-radius: 15px;
+}
+.stat-box span { font-size: 12px; display: block; opacity: 0.9; }
+.stat-box strong { font-size: 20px; display: block; }
+
+/* SCREENS */
+.screen { display: none; padding: 15px; }
+.screen.active { display: block; animation: fadeIn 0.3s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* SHOP HEADER */
+.shop-header { text-align: center; margin-bottom: 15px; }
+.shop-header h1 { font-size: 22px; color: var(--primary-dark); }
+.shop-header p { font-size: 13px; color: var(--muted); }
+
+/* KATEGORI TABS */
+.category-tabs {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+  scrollbar-width: none;
+}
+.category-tabs::-webkit-scrollbar { display: none; }
+.cat-btn {
+  flex: 0 0 auto;
+  padding: 8px 18px;
+  border-radius: 20px;
+  border: 2px solid var(--primary);
+  background: white;
+  color: var(--primary);
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.cat-btn.active {
+  background: var(--primary);
+  color: white;
+}
+
+/* MENU GRID */
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.squishy-card {
+  background: var(--card-bg);
+  border-radius: 15px;
+  padding: 8px;
+  text-align: center;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transition: transform 0.1s;
+  border: 2px solid transparent;
+}
+.squishy-card:active { transform: scale(0.95); border-color: var(--primary); }
+.squishy-card img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: contain;
+  background: #f9f9f9;
+  border-radius: 10px;
+  margin-bottom: 5px;
+}
+.squishy-card .item-name { font-size: 11px; font-weight: bold; line-height: 1.2; height: 26px; overflow: hidden; }
+.squishy-card .item-price { font-size: 13px; color: var(--primary-dark); font-weight: 900; margin-top: 4px; }
+
+/* CRAFT SCREEN */
+.craft-card {
+  background: var(--card-bg);
+  border-radius: 25px;
+  padding: 30px 20px;
+  text-align: center;
+  box-shadow: var(--shadow);
+  max-width: 350px;
+  margin: 20px auto;
+}
+.item-preview img {
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+  animation: bounce 1s infinite;
+}
+@keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+.progress-container {
+  background: #E0E0E0;
+  border-radius: 20px;
+  height: 20px;
+  width: 100%;
+  margin: 20px 0;
+  overflow: hidden;
+}
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #FF85A2, #FFB6C1);
+  border-radius: 20px;
+  transition: width 0.1s linear;
+}
+
+/* SUCCESS SCREEN */
+.success-card {
+  background: var(--card-bg);
+  border-radius: 25px;
+  padding: 40px 20px;
+  text-align: center;
+  box-shadow: var(--shadow);
+  max-width: 350px;
+  margin: 20px auto;
+  border: 3px solid #FFD700;
+}
+.success-card h2 { color: #28a745; font-size: 26px; margin-bottom: 10px; }
+.coin-earned {
+  font-size: 32px;
+  font-weight: 900;
+  color: #DAA520;
+  margin: 15px 0;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.btn-main {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 25px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 0 var(--primary-dark);
+  transition: 0.1s;
+}
+.btn-main:active { transform: translateY(4px); box-shadow: none; }
+
+/* Dark Mode (Optional) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #2C2224;
+    --card-bg: #3E3134;
+    --text: #F0F0F0;
+    --muted: #B0A0A5;
+    --primary: #FF85A2;
+    --primary-dark: #E05C7C;
+  }
+  .squishy-card img { background: #55464A; }
+}
