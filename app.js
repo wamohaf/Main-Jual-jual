@@ -1,5 +1,5 @@
 // ==========================================
-// 1. DATA GAME
+// 1. DATA GAME (20 Item)
 // ==========================================
 const gameData = {
   categories: [
@@ -7,7 +7,17 @@ const gameData = {
     { id: "food", name: "🍔 Squishy Food" } 
   ],
   items: [
-    // --- KATEGORI TOYS (10 Item) ---
+    // --- KATEGORI TOYS (Item 1 hingga 20) ---
+    { id: 1, cat: "toys", name: "Item 1", price: 2.00, image: "item1.png" },
+    { id: 2, cat: "toys", name: "Item 2", price: 3.00, image: "item2.png" },
+    { id: 3, cat: "toys", name: "Item 3", price: 5.00, image: "item3.png" },
+    { id: 4, cat: "toys", name: "Item 4", price: 4.00, image: "item4.png" },
+    { id: 5, cat: "toys", name: "Item 5", price: 4.00, image: "item5.png" },
+    { id: 6, cat: "toys", name: "Item 6", price: 5.00, image: "item6.png" },
+    { id: 7, cat: "toys", name: "Item 7", price: 3.00, image: "item7.png" },
+    { id: 8, cat: "toys", name: "Item 8", price: 6.00, image: "item8.png" }, 
+    { id: 9, cat: "toys", name: "Item 9", price: 2.00, image: "item9.png" }, 
+    { id: 10, cat: "toys", name: "Item 10", price: 4.00, image: "item10.png" }, 
     { id: 11, cat: "toys", name: "Self Love Loops", price: 2.00, image: "item11.png" },
     { id: 12, cat: "toys", name: "Neko Squishy", price: 3.00, image: "item12.png" },
     { id: 13, cat: "toys", name: "Honey Cake", price: 5.00, image: "item13.png" },
@@ -19,7 +29,7 @@ const gameData = {
     { id: 19, cat: "toys", name: "Cheese Block", price: 2.00, image: "item19.png" }, 
     { id: 20, cat: "toys", name: "Ice Cube", price: 4.00, image: "item20.png" }, 
     
-    // --- CONTOH KATEGORI FOOD (Tambah nanti) ---
+    // --- CONTOH KATEGORI FOOD (Bila nak tambah nanti) ---
     // { id: 21, cat: "food", name: "Burger Squishy", price: 5.00, image: "item21.png" },
   ]
 };
@@ -92,7 +102,7 @@ window.changeCategory = function(catId) {
   state.activeCategory = catId;
   renderCategories();
   renderMenu();
-  updateHeader(); // Update stok bila tukar tab
+  updateHeader();
 };
 
 window.startCrafting = function(itemId) {
