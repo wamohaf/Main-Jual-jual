@@ -1,4 +1,4 @@
-const CACHE = 'squishy-game-v1.2'; // Tukar versi ini bila anda update kod
+const CACHE = 'squishy-game-v1.5'; // Tukar dari v1.4 atau v1.3 ke v1.5
 const CORE = [
   '/',
   '/index.html',

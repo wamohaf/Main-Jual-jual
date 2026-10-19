@@ -1,5 +1,5 @@
 // ==========================================
-// 1. DATA GAME (20 Item)
+// 1. DATA GAME (20 Item Penuh)
 // ==========================================
 const gameData = {
   categories: [
@@ -7,17 +7,19 @@ const gameData = {
     { id: "food", name: "🍔 Squishy Food" } 
   ],
   items: [
-    // --- KATEGORI TOYS (Item 1 hingga 20) ---
-    { id: 1, cat: "toys", name: "Item 1", price: 2.00, image: "item1.png" },
-    { id: 2, cat: "toys", name: "Item 2", price: 3.00, image: "item2.png" },
-    { id: 3, cat: "toys", name: "Item 3", price: 5.00, image: "item3.png" },
-    { id: 4, cat: "toys", name: "Item 4", price: 4.00, image: "item4.png" },
-    { id: 5, cat: "toys", name: "Item 5", price: 4.00, image: "item5.png" },
-    { id: 6, cat: "toys", name: "Item 6", price: 5.00, image: "item6.png" },
-    { id: 7, cat: "toys", name: "Item 7", price: 3.00, image: "item7.png" },
-    { id: 8, cat: "toys", name: "Item 8", price: 6.00, image: "item8.png" }, 
-    { id: 9, cat: "toys", name: "Item 9", price: 2.00, image: "item9.png" }, 
-    { id: 10, cat: "toys", name: "Item 10", price: 4.00, image: "item10.png" }, 
+    // --- KATEGORI TOYS (Item 1 hingga 10 - Baru dikemas kini) ---
+    { id: 1, cat: "toys", name: "Rainbow Ice Cream", price: 3.00, image: "item1.png" },
+    { id: 2, cat: "toys", name: "Green Bear Pillow", price: 4.00, image: "item2.png" },
+    { id: 3, cat: "toys", name: "Red Star Pillow", price: 4.00, image: "item3.png" },
+    { id: 4, cat: "toys", name: "Sharla Cookies", price: 2.50, image: "item4.png" },
+    { id: 5, cat: "toys", name: "Drinha Orange", price: 3.50, image: "item5.png" },
+    { id: 6, cat: "toys", name: "Story Blue", price: 3.00, image: "item6.png" },
+    { id: 7, cat: "toys", name: "Nabati Wafer", price: 3.50, image: "item7.png" },
+    { id: 8, cat: "toys", name: "Pamii Bear", price: 5.00, image: "item8.png" }, 
+    { id: 9, cat: "toys", name: "Strawberry Butter", price: 4.50, image: "item9.png" }, 
+    { id: 10, cat: "toys", name: "Pink iPad", price: 6.00, image: "item10.png" }, 
+    
+    // --- Item 11 hingga 20 (Yang asal) ---
     { id: 11, cat: "toys", name: "Self Love Loops", price: 2.00, image: "item11.png" },
     { id: 12, cat: "toys", name: "Neko Squishy", price: 3.00, image: "item12.png" },
     { id: 13, cat: "toys", name: "Honey Cake", price: 5.00, image: "item13.png" },
