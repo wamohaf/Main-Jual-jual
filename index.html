@@ -4,13 +4,16 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#FFB6C1">
-  <meta name="application-name" content="Squishy Shop">
+  <meta name="application-name" content="Main Jual-jual">
   <link rel="manifest" href="/manifest.webmanifest">
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
   <link rel="apple-touch-icon" sizes="192x192" href="/icon-192.png">
   <link rel="stylesheet" href="style.css">
-  <title>Squishy Shop</title>
+  <title>Main Jual-jual</title>
+  
+  <!-- Masukkan Supabase Library -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
   <!-- HEADER: Money & Cart -->
@@ -40,26 +43,11 @@
       <div id="menuGrid" class="menu-grid"></div>
     </section>
 
-    <!-- CRAFTING SCREEN -->
-    <section id="craftScreen" class="screen">
-      <div class="craft-card">
-        <h2 id="craftTitle">Making...</h2>
-        <div class="item-preview">
-          <img id="craftImage" src="" alt="Item">
-        </div>
-        <h3 id="craftName">Item Name</h3>
-        <div class="progress-container">
-          <div id="progressBar" class="progress-bar"></div>
-        </div>
-        <p id="craftStatus">Please wait...</p>
-      </div>
-    </section>
-
     <!-- SUCCESS SCREEN -->
     <section id="successScreen" class="screen">
       <div class="success-card">
         <h2>Finished! 🎉</h2>
-        <p>All orders have been packed.</p>
+        <p>Your order is sent to the seller.</p>
         <div class="coin-earned">+ <span id="earnedCoins"></span></div>
         <button onclick="goToMenu()" class="btn-main">Play Again</button>
       </div>
@@ -79,9 +67,14 @@
       <span>Total:</span>
       <strong id="cartTotalPrice">RM 0</strong>
     </div>
+    <!-- BUYER NAME INPUT -->
+    <div style="margin-bottom: 15px;">
+      <label style="font-size: 14px; font-weight: bold; margin-bottom: 5px; display: block;">Your Name:</label>
+      <input type="text" id="buyerName" placeholder="e.g. Aisyah" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc;">
+    </div>
     <div class="modal-actions">
       <button class="btn-secondary" onclick="closeCart()">Add More</button>
-      <button class="btn-main" id="payBtn" onclick="payAndProcess()">Pay & Make</button>
+      <button class="btn-main" id="payBtn" onclick="payAndProcess()">Pay & Send Order</button>
     </div>
   </dialog>
 

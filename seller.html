@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Main Jual-jual - Seller Dashboard</title>
+  <!-- Masukkan Supabase Library -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    body { font-family: sans-serif; background: #2C2224; color: white; padding: 20px; margin: 0; }
+    h1 { color: #FF85A2; text-align: center; }
+    .order-card { background: #3E3134; border-radius: 15px; padding: 15px; margin-bottom: 15px; border-left: 5px solid #FF85A2; }
+    .order-card.new { border-left-color: #28a745; animation: pulse 1s infinite alternate; }
+    @keyframes pulse { from { opacity: 1; } to { opacity: 0.7; } }
+    .buyer-name { font-size: 18px; font-weight: bold; color: #FFB6C1; margin-bottom: 5px; }
+    .item-list { font-size: 14px; margin-bottom: 10px; color: #ddd; }
+    .total { font-size: 16px; font-weight: bold; color: #DAA520; margin-bottom: 10px; }
+    .status-btn { background: #FF85A2; color: white; border: none; padding: 10px; border-radius: 8px; width: 100%; font-weight: bold; cursor: pointer; }
+    .status-btn.done { background: #28a745; cursor: default; }
+    .empty { text-align: center; color: gray; margin-top: 50px; }
+  </style>
+</head>
+<body>
+  <h1>🛒 Main Jual-jual (Seller)</h1>
+  <div id="ordersList">
+    <p class="empty">Waiting for orders...</p>
+  </div>
+
+  <script>
+    // TUKAR BAHAGIAN INI DENGAN URL DAN KEY ANDA
+    const SUPABASE_URL = 'https://dozlycklbchehbbzfijl.supabase.co/rest/v1/'; // <-- Tampal URL anda di sini
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRvemx5Y2tsYmNoZWhiYnpmaWpsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIzOTk4NzQsImV4cCI6MjEwNzk3NTg3NH0.tvtGUEQYPA75nBL2KtSJSUqoWcBR5fyObFtvIydK0vc';     // <-- Tampal Anon Key anda di sini
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const ordersList = document.getElementById('ordersList');
+
+    async function fetchOrders() {
+      const { data, error } = await supabaseClient
+        .from('orders')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) { console.error(error); return; }
+
+      if (data.length === 0) {
+        ordersList.innerHTML = '<p class="empty">No orders yet.</p>';
+        return;
+      }
+
+      ordersList.innerHTML = data.map(order => {
+        const itemsText = order.items.map(i => `${i.qty}x ${i.name}`).join(', ');
+        const isDone = order.status === 'done';
+        return `
+          <div class="order-card ${isDone ? '' : 'new'}">
+            <div class="buyer-name">👤 ${order.buyer_name}</div>
+            <div class="item-list">📦 ${itemsText}</div>
+            <div class="total">💰 Total: RM ${order.total_price}</div>
+            <button class="status-btn ${isDone ? 'done' : ''}" onclick="markDone(${order.id})" ${isDone ? 'disabled' : ''}>
+              ${isDone ? '✅ Completed' : 'Mark as Done'}
+            </button>
+          </div>
+        `;
+      }).join('');
+    }
+
+    window.markDone = async function(orderId) {
+      const { error } = await supabaseClient
+        .from('orders')
+        .update({ status: 'done' })
+        .eq('id', orderId);
+      
+      if (error) alert("Error updating: " + error.message);
+      else fetchOrders();
+    };
+
+    fetchOrders();
+
+    // Realtime listener
+    supabaseClient.channel('custom-insert-channel')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, payload => {
+        fetchOrders(); 
+      })
+      .subscribe();
+  </script>
+</body>
+</html>
