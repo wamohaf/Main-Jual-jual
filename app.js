@@ -34,12 +34,12 @@ let state = {
   coins: 0,
   activeCategory: "toys",
   cart: [],
-  orders: [], // Senarai pesanan
+  orders: [],
   isSellerMode: false
 };
 
 // ==========================================
-// SIMPAN & MUAT DATA (localStorage)
+// SIMPAN & MUAT DATA
 // ==========================================
 function saveGame() { 
   localStorage.setItem('mainJualJualData', JSON.stringify({ coins: state.coins, orders: state.orders })); 
@@ -59,15 +59,13 @@ function loadGame() {
 function updateHeader() {
   document.getElementById('coinDisplay').textContent = `RM ${state.coins}`;
   const totalCartCount = state.cart.reduce((sum, item) => sum + item.qty, 0);
-  // Kalau takde cart badge, kita buat sendiri
-  const cartBtn = document.getElementById('modeToggleBtn');
-  if(cartBtn) {
-      // Update total sales untuk seller
-      const totalSales = state.orders.filter(o => o.status === 'done').reduce((sum, o) => sum + o.total_price, 0);
-      const tSalesEl = document.getElementById('totalSalesDisplay');
-      if(tSalesEl) tSalesEl.textContent = `RM ${totalSales}`;
-  }
+  document.getElementById('cartCount').textContent = totalCartCount;
+  
+  const totalSales = state.orders.filter(o => o.status === 'done').reduce((sum, o) => sum + o.total_price, 0);
+  const tSalesEl = document.getElementById('totalSalesDisplay');
+  if(tSalesEl) tSalesEl.textContent = `RM ${totalSales}`;
 }
+
 function renderCategories() {
   document.getElementById('categoryTabs').innerHTML = gameData.categories.map(cat => `
     <button class="cat-btn ${state.activeCategory === cat.id ? 'active' : ''}" onclick="changeCategory('${cat.id}')">${cat.name}</button>
@@ -87,7 +85,7 @@ function renderMenu() {
 window.changeCategory = function(catId) { state.activeCategory = catId; renderCategories(); renderMenu(); };
 
 // ==========================================
-// CART LOGIC (PEMBELI)
+// CART LOGIC
 // ==========================================
 window.addToCart = function(itemId) {
   const item = gameData.items.find(i => i.id === itemId);
@@ -117,7 +115,7 @@ window.changeQty = function(id, change) {
 window.closeCart = function() { document.getElementById('cartDialog').close(); };
 
 // ==========================================
-// PROSES BAYAR (PEMBELI -> PENJUAL)
+// PROSES BAYAR
 // ==========================================
 window.payAndProcess = function() {
   const buyerName = document.getElementById('buyerName').value.trim() || 'Anonymous';
@@ -133,7 +131,6 @@ window.payAndProcess = function() {
     status: 'pending'
   };
 
-  // Simpan pesanan
   state.orders.push(orderData);
   state.coins += totalPrice;
   saveGame();
@@ -141,19 +138,18 @@ window.payAndProcess = function() {
   
   closeCart();
   
-  // Tukar ke skrin berjaya
-  document.getElementById('menuScreen').classList.remove('active');
-  document.getElementById('successScreen').classList.add('active');
+  // Sembunyikan menu, tunjuk skrin berjaya
+  document.getElementById('menuScreen').style.display = 'none';
+  document.getElementById('successScreen').style.display = 'block';
   document.getElementById('earnedCoins').textContent = `RM ${totalPrice}`;
   
-  // Kosongkan cart
   state.cart = [];
   updateHeader();
 };
 
 window.goToMenu = function() {
-  document.getElementById('successScreen').classList.remove('active');
-  document.getElementById('menuScreen').classList.add('active');
+  document.getElementById('successScreen').style.display = 'none';
+  document.getElementById('menuScreen').style.display = 'block';
   renderMenu();
 };
 window.resetCoins = function() {
@@ -161,7 +157,6 @@ window.resetCoins = function() {
     state.coins = 0; 
     saveGame(); 
     updateHeader(); 
-    alert("Money reset!");
   }
 };
 
@@ -179,26 +174,29 @@ window.toggleMode = function() {
   if (state.isSellerMode) {
     buyerDiv.style.display = 'none';
     sellerDiv.style.display = 'block';
-    toggleBtn.innerHTML = '🛒 Seller Mode';
+    toggleBtn.innerHTML = '🛒 Seller';
     toggleBtn.style.background = '#FF85A2'; 
-    fetchOrders(); // Tarik pesanan
+    toggleBtn.style.color = 'white';
+    cartBtn.style.display = 'none'; // Sembunyikan butang troli di mode penjual
+    fetchOrders(); 
   } else {
     sellerDiv.style.display = 'none';
     buyerDiv.style.display = 'block';
-    toggleBtn.innerHTML = '👤 Buyer Mode';
+    toggleBtn.innerHTML = '👤 Buyer';
     toggleBtn.style.background = 'white';
-    renderMenu(); // Refresh menu pembeli
+    toggleBtn.style.color = 'black';
+    cartBtn.style.display = 'block'; // Tunjuk butang troli di mode pembeli
+    renderMenu(); 
   }
   updateHeader();
 };
 
 // ==========================================
-// LOGIK PENJUAL (SELLER)
+// LOGIK PENJUAL
 // ==========================================
 window.fetchOrders = function() {
   const ordersList = document.getElementById('ordersList');
   
-  // Kira total sales (hanya yang berstatus 'done')
   const totalSales = state.orders
     .filter(order => order.status === 'done')
     .reduce((sum, order) => sum + order.total_price, 0);
@@ -206,11 +204,10 @@ window.fetchOrders = function() {
   document.getElementById('totalSalesDisplay').textContent = `RM ${totalSales}`;
 
   if (state.orders.length === 0) {
-    ordersList.innerHTML = '<p class="empty" style="text-align: center; color: gray; margin-top: 50px;">No orders yet.</p>';
+    ordersList.innerHTML = '<p class="empty">No orders yet.</p>';
     return;
   }
 
-  // Tunjuk order terbaru dahulu
   const sortedOrders = [...state.orders].reverse();
 
   ordersList.innerHTML = sortedOrders.map(order => {
@@ -248,7 +245,7 @@ window.markDone = function(orderId) {
   if (order) {
     order.status = 'done';
     saveGame();
-    fetchOrders(); // Refresh skrin
+    fetchOrders(); 
   }
 };
 
@@ -268,7 +265,6 @@ function init() {
   renderMenu();
   updateHeader();
   
-  // Daftar Service Worker (PWA)
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/sw.js').catch(console.error);
   }
