@@ -1,4 +1,111 @@
-/* Tambahan untuk Skrin Penjual dalam 1 Telefon */
+:root {
+  --bg: #FFF0F5;
+  --card-bg: #FFFFFF;
+  --primary: #FF85A2;
+  --primary-dark: #E05C7C;
+  --text: #4A3B3F;
+  --muted: #9A8C90;
+  --shadow: 0 4px 12px rgba(255, 133, 162, 0.15);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  padding-bottom: 20px;
+}
+
+/* HEADER */
+.game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background: linear-gradient(135deg, #FFB6C1, #FF85A2);
+  color: white;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  box-shadow: var(--shadow);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.stat-box {
+  background: rgba(255,255,255,0.2);
+  padding: 8px 18px;
+  border-radius: 15px;
+}
+.stat-box span { font-size: 12px; display: block; opacity: 0.9; }
+.stat-box strong { font-size: 20px; display: block; }
+
+/* MENU GRID (BAHAGIAN PALING PENTING) */
+.menu-grid { 
+  display: grid; 
+  grid-template-columns: repeat(3, 1fr); /* Paksa 3 kolum */
+  gap: 12px; 
+  padding: 0 15px; /* Beri sedikit ruang di tepi */
+}
+.squishy-card {
+  background: var(--card-bg); 
+  border-radius: 15px; 
+  padding: 8px; 
+  text-align: center; 
+  box-shadow: var(--shadow); 
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.squishy-card img {
+  width: 100%; 
+  aspect-ratio: 1; 
+  object-fit: contain; /* Pastikan gambar tak terlebih besar */
+  background: #f9f9f9; 
+  border-radius: 10px; 
+  margin-bottom: 5px;
+}
+.squishy-card .item-name { 
+  font-size: 11px; 
+  font-weight: bold; 
+  height: 26px; 
+  overflow: hidden; 
+  line-height: 1.2;
+}
+.squishy-card .item-price { 
+  font-size: 14px; 
+  color: var(--primary-dark); 
+  font-weight: 900; 
+  margin-top: 4px;
+  padding-right: 26px; 
+  text-align: left; 
+  padding-left: 4px;
+}
+
+/* BUTANG TAMBAH (+) */
+.add-btn {
+  position: absolute; 
+  bottom: 8px; 
+  right: 6px; 
+  background: var(--primary); 
+  color: white; 
+  border: none;
+  width: 26px; 
+  height: 26px; 
+  border-radius: 50%; 
+  font-size: 18px; 
+  font-weight: bold; 
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2); 
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+  padding-bottom: 2px;
+}
+.add-btn:active { transform: scale(0.8); }
+
+/* SKRIN PENJUAL (SELLER) */
 #sellerContainer {
   background: #2C2224;
   min-height: 80vh;
@@ -17,3 +124,17 @@
 .total { font-size: 16px; font-weight: bold; color: #DAA520; margin-bottom: 15px; text-align: right; }
 .status-btn { background: #FF85A2; color: white; border: none; padding: 12px; border-radius: 8px; width: 100%; font-weight: bold; cursor: pointer; font-size: 15px; }
 .status-btn.done { background: #28a745; cursor: default; }
+
+/* DIALOG POPUP (CART) */
+dialog { border: none; border-radius: 20px; width: 90vw; max-width: 400px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+dialog::backdrop { background: rgba(0,0,0,0.5); }
+.modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+.close-btn { background: none; border: none; font-size: 24px; color: var(--muted); cursor: pointer; }
+.cart-list { max-height: 40vh; overflow-y: auto; margin-bottom: 15px; border-top: 1px solid #eee; border-bottom: 1px solid #eee; padding: 10px 0; }
+.cart-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; font-size: 14px; }
+.cart-item-info { display: flex; align-items: center; gap: 10px; }
+.cart-item-info img { width: 30px; height: 30px; object-fit: contain; }
+.cart-item-controls button { background: #eee; border: none; padding: 2px 8px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+.cart-total { display: flex; justify-content: space-between; font-size: 18px; font-weight: bold; margin-bottom: 20px; color: var(--primary-dark); }
+.modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+.btn-secondary { background: #eee; color: var(--text); border: none; padding: 10px 20px; border-radius: 15px; font-weight: bold; cursor: pointer; }
