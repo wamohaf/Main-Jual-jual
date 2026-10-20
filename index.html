@@ -10,26 +10,33 @@
   <title>Main Jual-jual</title>
 </head>
 <body>
-  <!-- HEADER: Tukar Mode & Duit -->
-  <header class="game-header" style="justify-content: space-between;">
-    <div class="stat-box" style="display: flex; align-items: center; gap: 10px;">
+  <!-- HEADER -->
+  <header class="game-header">
+    <div class="stat-box" style="display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.2); padding: 8px 12px; border-radius: 15px;">
       <div>
-        <span>🪙 Money</span>
-        <strong id="coinDisplay">RM 0</strong>
+        <span style="font-size: 12px; display: block; opacity: 0.9;">🪙 Money</span>
+        <strong id="coinDisplay" style="font-size: 18px; display: block;">RM 0</strong>
       </div>
       <button onclick="resetCoins()" style="background: rgba(255,255,255,0.3); border: none; border-radius: 8px; padding: 5px 8px; cursor: pointer; font-size: 14px;">🔄</button>
     </div>
     
-    <!-- Butang Tukar Mode -->
-    <button id="modeToggleBtn" class="cart-btn" onclick="toggleMode()" style="font-size: 14px; padding: 10px 15px;">
-      👤 Buyer Mode
-    </button>
+    <div style="display: flex; gap: 8px;">
+      <!-- Butang Troli (Hanya untuk Pembeli) -->
+      <button id="cartBtn" class="cart-btn" onclick="openCart()" style="position: relative; padding: 8px 12px; font-size: 20px; border-radius: 12px; border: none; background: white; cursor: pointer; box-shadow: 0 3px 0 #d15d79;">
+        🛒 <span id="cartCount" class="cart-badge" style="position: absolute; top: -8px; right: -8px; background: #ff3b30; color: white; font-size: 12px; font-weight: bold; padding: 2px 6px; border-radius: 50%;">0</span>
+      </button>
+
+      <!-- Butang Tukar Mode -->
+      <button id="modeToggleBtn" onclick="toggleMode()" style="font-size: 13px; padding: 10px 15px; border-radius: 12px; border: none; background: white; font-weight: bold; cursor: pointer; box-shadow: 0 3px 0 #d15d79;">
+        👤 Buyer
+      </button>
+    </div>
   </header>
 
   <main>
-    <!-- ================= SKRIN PEMBELI ================= -->
-    <div id="buyerContainer">
-      <section id="menuScreen" class="screen active">
+    <!-- SKRIN PEMBELI -->
+    <div id="buyerContainer" style="display: block;">
+      <section id="menuScreen" class="screen active" style="display: block;">
         <div class="shop-header">
           <h1>Choose Squishy</h1>
           <p>Tap + to add to cart</p>
@@ -38,7 +45,7 @@
         <div id="menuGrid" class="menu-grid"></div>
       </section>
 
-      <section id="successScreen" class="screen">
+      <section id="successScreen" class="screen" style="display: none;">
         <div class="success-card">
           <h2>Order Sent! 🎉</h2>
           <p>Please give the phone to the Seller.</p>
@@ -48,21 +55,21 @@
       </section>
     </div>
 
-    <!-- ================= SKRIN PENJUAL ================= -->
+    <!-- SKRIN PENJUAL -->
     <div id="sellerContainer" style="display: none;">
-      <div class="seller-header" style="display: flex; justify-content: space-between; align-items: center; background: #3E3134; padding: 15px; border-radius: 15px; margin-bottom: 20px; border: 1px solid #55464A; color: white;">
+      <div class="seller-header">
         <div class="total-sales-box">
-          <span style="font-size: 12px; color: #bbb; display: block;">Total Sales</span>
-          <strong id="totalSalesDisplay" style="font-size: 24px; color: #DAA520;">RM 0</strong>
+          <span>Total Sales</span>
+          <strong id="totalSalesDisplay">RM 0</strong>
         </div>
         <div class="btn-group">
-          <button class="btn-action btn-refresh" onclick="fetchOrders()" style="background: #007aff; color: white; border: none; padding: 10px 15px; border-radius: 10px; font-weight: bold; cursor: pointer;">🔄 Refresh</button>
-          <button class="btn-action btn-reset" onclick="resetAllOrders()" style="background: #ff3b30; color: white; border: none; padding: 10px 15px; border-radius: 10px; font-weight: bold; cursor: pointer;">🗑️ Reset</button>
+          <button class="btn-action btn-refresh" onclick="fetchOrders()">🔄 Refresh</button>
+          <button class="btn-action btn-reset" onclick="resetAllOrders()">🗑️ Reset</button>
         </div>
       </div>
-      <h1 style="color: #FF85A2; text-align: center; font-size: 20px;">🛒 Main Jual-jual (Seller)</h1>
+      <h1 style="color: #FF85A2; text-align: center; font-size: 20px; margin-top: 10px;">🛒 Main Jual-jual (Seller)</h1>
       <div id="ordersList">
-        <p class="empty" style="text-align: center; color: gray; margin-top: 50px;">Waiting for orders...</p>
+        <p class="empty">Waiting for orders...</p>
       </div>
     </div>
   </main>
