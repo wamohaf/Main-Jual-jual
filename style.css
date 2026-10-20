@@ -40,12 +40,47 @@ body {
 .stat-box span { font-size: 12px; display: block; opacity: 0.9; }
 .stat-box strong { font-size: 20px; display: block; }
 
-/* MENU GRID (BAHAGIAN PALING PENTING) */
+/* SHOP HEADER */
+.shop-header { text-align: center; margin: 20px 0 15px 0; padding: 0 15px; }
+.shop-header h1 { font-size: 24px; color: var(--primary-dark); margin-bottom: 5px; }
+.shop-header p { font-size: 14px; color: var(--muted); }
+
+/* KATEGORI TABS */
+.category-tabs { 
+  display: flex; 
+  gap: 10px; 
+  overflow-x: auto; 
+  padding: 5px 15px 15px 15px; 
+  margin-bottom: 5px; 
+}
+.category-tabs::-webkit-scrollbar { display: none; }
+.cat-btn {
+  flex: 0 0 auto; 
+  padding: 10px 20px; 
+  border-radius: 25px;
+  border: 2px solid var(--primary); 
+  background: var(--card-bg);
+  color: var(--primary); 
+  font-weight: bold; 
+  font-size: 15px; 
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  outline: none;
+}
+.cat-btn.active { 
+  background: var(--primary); 
+  color: white; 
+  box-shadow: 0 4px 8px rgba(255, 133, 162, 0.4);
+}
+.cat-btn:active { transform: scale(0.95); }
+
+/* MENU GRID */
 .menu-grid { 
   display: grid; 
-  grid-template-columns: repeat(3, 1fr); /* Paksa 3 kolum */
+  grid-template-columns: repeat(3, 1fr); 
   gap: 12px; 
-  padding: 0 15px; /* Beri sedikit ruang di tepi */
+  padding: 0 15px; 
 }
 .squishy-card {
   background: var(--card-bg); 
@@ -61,7 +96,7 @@ body {
 .squishy-card img {
   width: 100%; 
   aspect-ratio: 1; 
-  object-fit: contain; /* Pastikan gambar tak terlebih besar */
+  object-fit: contain; 
   background: #f9f9f9; 
   border-radius: 10px; 
   margin-bottom: 5px;
@@ -111,7 +146,26 @@ body {
   min-height: 80vh;
   padding: 15px;
   border-radius: 15px;
+  margin: 15px;
 }
+.seller-header {
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  background: #3E3134; 
+  padding: 15px; 
+  border-radius: 15px; 
+  margin-bottom: 20px; 
+  border: 1px solid #55464A; 
+  color: white;
+}
+.total-sales-box span { font-size: 12px; color: #bbb; display: block; }
+.total-sales-box strong { font-size: 24px; color: #DAA520; }
+.btn-group { display: flex; gap: 8px; }
+.btn-action { border: none; padding: 10px 15px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 14px; color: white; }
+.btn-refresh { background: #007aff; }
+.btn-reset { background: #ff3b30; }
+
 .order-card { background: #3E3134; border-radius: 15px; padding: 15px; margin-bottom: 15px; border-left: 5px solid #FF85A2; color: white; }
 .order-card.new { border-left-color: #28a745; }
 .buyer-name { font-size: 18px; font-weight: bold; color: #FFB6C1; margin-bottom: 10px; border-bottom: 1px solid #55464A; padding-bottom: 5px; }
@@ -124,6 +178,7 @@ body {
 .total { font-size: 16px; font-weight: bold; color: #DAA520; margin-bottom: 15px; text-align: right; }
 .status-btn { background: #FF85A2; color: white; border: none; padding: 12px; border-radius: 8px; width: 100%; font-weight: bold; cursor: pointer; font-size: 15px; }
 .status-btn.done { background: #28a745; cursor: default; }
+.empty { text-align: center; color: gray; margin-top: 50px; }
 
 /* DIALOG POPUP (CART) */
 dialog { border: none; border-radius: 20px; width: 90vw; max-width: 400px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
@@ -138,3 +193,19 @@ dialog::backdrop { background: rgba(0,0,0,0.5); }
 .cart-total { display: flex; justify-content: space-between; font-size: 18px; font-weight: bold; margin-bottom: 20px; color: var(--primary-dark); }
 .modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
 .btn-secondary { background: #eee; color: var(--text); border: none; padding: 10px 20px; border-radius: 15px; font-weight: bold; cursor: pointer; }
+
+/* SUCCESS SCREEN */
+.success-card {
+  background: var(--card-bg);
+  border-radius: 25px;
+  padding: 40px 20px;
+  text-align: center;
+  box-shadow: var(--shadow);
+  max-width: 350px;
+  margin: 50px auto;
+  border: 3px solid #FFD700;
+}
+.success-card h2 { color: #28a745; font-size: 26px; margin-bottom: 10px; }
+.coin-earned { font-size: 32px; font-weight: 900; color: #DAA520; margin: 15px 0; }
+.btn-main { background: var(--primary); color: white; border: none; padding: 12px 30px; border-radius: 25px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 0 var(--primary-dark); }
+.btn-main:active { transform: translateY(4px); box-shadow: none; }
