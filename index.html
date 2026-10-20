@@ -6,52 +6,65 @@
   <meta name="theme-color" content="#FFB6C1">
   <meta name="application-name" content="Main Jual-jual">
   <link rel="manifest" href="/manifest.webmanifest">
-  <link rel="icon" href="/favicon.ico" sizes="any">
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
-  <link rel="apple-touch-icon" sizes="192x192" href="/icon-192.png">
   <link rel="stylesheet" href="style.css">
   <title>Main Jual-jual</title>
-  
-  <!-- Masukkan Supabase Library -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-  <!-- HEADER: Money & Cart -->
-  <header class="game-header">
-    <div class="stat-box" style="display: flex; align-items: center; justify-content: space-between; width: 150px;">
+  <!-- HEADER: Tukar Mode & Duit -->
+  <header class="game-header" style="justify-content: space-between;">
+    <div class="stat-box" style="display: flex; align-items: center; gap: 10px;">
       <div>
         <span>🪙 Money</span>
         <strong id="coinDisplay">RM 0</strong>
       </div>
-      <!-- RESET BUTTON -->
-      <button onclick="resetCoins()" title="Reset Money" style="background: rgba(255,255,255,0.3); border: none; border-radius: 8px; padding: 5px 8px; cursor: pointer; font-size: 14px;">🔄</button>
+      <button onclick="resetCoins()" style="background: rgba(255,255,255,0.3); border: none; border-radius: 8px; padding: 5px 8px; cursor: pointer; font-size: 14px;">🔄</button>
     </div>
     
-    <button id="cartBtn" class="cart-btn" onclick="openCart()">
-      🛒 <span id="cartCount" class="cart-badge">0</span>
+    <!-- Butang Tukar Mode -->
+    <button id="modeToggleBtn" class="cart-btn" onclick="toggleMode()" style="font-size: 14px; padding: 10px 15px;">
+      👤 Buyer Mode
     </button>
   </header>
 
   <main>
-    <!-- MAIN SCREEN: MENU -->
-    <section id="menuScreen" class="screen active">
-      <div class="shop-header">
-        <h1>Choose Squishy</h1>
-        <p>Tap + to add to cart</p>
-      </div>
-      <div id="categoryTabs" class="category-tabs"></div>
-      <div id="menuGrid" class="menu-grid"></div>
-    </section>
+    <!-- ================= SKRIN PEMBELI ================= -->
+    <div id="buyerContainer">
+      <section id="menuScreen" class="screen active">
+        <div class="shop-header">
+          <h1>Choose Squishy</h1>
+          <p>Tap + to add to cart</p>
+        </div>
+        <div id="categoryTabs" class="category-tabs"></div>
+        <div id="menuGrid" class="menu-grid"></div>
+      </section>
 
-    <!-- SUCCESS SCREEN -->
-    <section id="successScreen" class="screen">
-      <div class="success-card">
-        <h2>Finished! 🎉</h2>
-        <p>Your order is sent to the seller.</p>
-        <div class="coin-earned">+ <span id="earnedCoins"></span></div>
-        <button onclick="goToMenu()" class="btn-main">Play Again</button>
+      <section id="successScreen" class="screen">
+        <div class="success-card">
+          <h2>Order Sent! 🎉</h2>
+          <p>Please give the phone to the Seller.</p>
+          <div class="coin-earned">+ <span id="earnedCoins"></span></div>
+          <button onclick="goToMenu()" class="btn-main">Back to Menu</button>
+        </div>
+      </section>
+    </div>
+
+    <!-- ================= SKRIN PENJUAL ================= -->
+    <div id="sellerContainer" style="display: none;">
+      <div class="seller-header" style="display: flex; justify-content: space-between; align-items: center; background: #3E3134; padding: 15px; border-radius: 15px; margin-bottom: 20px; border: 1px solid #55464A; color: white;">
+        <div class="total-sales-box">
+          <span style="font-size: 12px; color: #bbb; display: block;">Total Sales</span>
+          <strong id="totalSalesDisplay" style="font-size: 24px; color: #DAA520;">RM 0</strong>
+        </div>
+        <div class="btn-group">
+          <button class="btn-action btn-refresh" onclick="fetchOrders()" style="background: #007aff; color: white; border: none; padding: 10px 15px; border-radius: 10px; font-weight: bold; cursor: pointer;">🔄 Refresh</button>
+          <button class="btn-action btn-reset" onclick="resetAllOrders()" style="background: #ff3b30; color: white; border: none; padding: 10px 15px; border-radius: 10px; font-weight: bold; cursor: pointer;">🗑️ Reset</button>
+        </div>
       </div>
-    </section>
+      <h1 style="color: #FF85A2; text-align: center; font-size: 20px;">🛒 Main Jual-jual (Seller)</h1>
+      <div id="ordersList">
+        <p class="empty" style="text-align: center; color: gray; margin-top: 50px;">Waiting for orders...</p>
+      </div>
+    </div>
   </main>
 
   <!-- CART POPUP -->
@@ -60,17 +73,14 @@
       <h2>🛒 Your Cart</h2>
       <button class="close-btn" onclick="closeCart()">×</button>
     </div>
-    <div id="cartList" class="cart-list">
-      <!-- Cart items will be generated here -->
-    </div>
+    <div id="cartList" class="cart-list"></div>
     <div class="cart-total">
       <span>Total:</span>
       <strong id="cartTotalPrice">RM 0</strong>
     </div>
-    <!-- BUYER NAME INPUT -->
     <div style="margin-bottom: 15px;">
       <label style="font-size: 14px; font-weight: bold; margin-bottom: 5px; display: block;">Your Name:</label>
-      <input type="text" id="buyerName" placeholder="e.g. Aisyah" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc;">
+      <input type="text" id="buyerName" placeholder="e.g. Papa" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc;">
     </div>
     <div class="modal-actions">
       <button class="btn-secondary" onclick="closeCart()">Add More</button>
