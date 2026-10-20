@@ -39,6 +39,59 @@ let state = {
 };
 
 // ==========================================
+// AUDIO FUNCTIONS (Web Audio API)
+// ==========================================
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+function playSound(type) {
+  // Pastikan audio context aktif (perlu interaksi pengguna pada sesetengah browser)
+  if (audioCtx.state === 'suspended') {
+    audioCtx.resume();
+  }
+
+  if (type === 'pop') {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.1);
+    
+    gain.gain.setValueAtTime(0.5, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+    
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.1);
+  } 
+  else if (type === 'cha-ching') {
+    // Bunyi duit syiling (dua frekuensi tinggi)
+    const osc1 = audioCtx.createOscillator();
+    const osc2 = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    
+    osc1.connect(gain);
+    osc2.connect(gain);
+    gain.connect(audioCtx.destination);
+    
+    osc1.type = 'triangle';
+    osc2.type = 'sine';
+    
+    osc1.frequency.setValueAtTime(1200, audioCtx.currentTime);
+    osc2.frequency.setValueAtTime(1600, audioCtx.currentTime + 0.1);
+    
+    gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+    
+    osc1.start();
+    osc2.start();
+    osc1.stop(audioCtx.currentTime + 0.5);
+    osc2.stop(audioCtx.currentTime + 0.5);
+  }
+}
+
+// ==========================================
 // SIMPAN & MUAT DATA
 // ==========================================
 function saveGame() { 
@@ -127,6 +180,7 @@ window.addToCart = function(itemId) {
     state.cart.push({ ...item, qty: 1 });
   }
   
+  playSound('pop'); // Bunyi Pop
   updateHeader();
   renderMenu();
 };
@@ -221,7 +275,6 @@ window.toggleMode = function() {
     toggleBtn.style.color = 'white';
     cartBtn.style.display = 'none'; 
     
-    // Panggil kedua-dua fungsi untuk papar pesanan & stok
     fetchOrders(); 
     renderInventory(); 
   } else {
@@ -262,6 +315,7 @@ window.restockItem = function(itemId) {
   const item = gameData.items.find(i => i.id === itemId);
   if (item) {
     item.stock += 1;
+    playSound('pop'); // Bunyi pop bila restock
     saveGame();
     renderInventory();
     renderMenu(); 
@@ -318,6 +372,7 @@ window.markDone = function(orderId) {
   const order = state.orders.find(o => o.id === orderId);
   if (order) {
     order.status = 'done';
+    playSound('cha-ching'); // Bunyi duit syiling!
     saveGame();
     fetchOrders(); 
   }
