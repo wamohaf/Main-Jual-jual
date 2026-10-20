@@ -1,12 +1,5 @@
 // ==========================================
-// 1. SUPABASE SETUP
-// ==========================================
-const SUPABASE_URL = 'https://dozlycklbchehbbzfjl.supabase.co'; 
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRvemx5Y2tsYmNoZWhiYnpmaWpsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIzOTk4NzQsImV4cCI6MjEwNzk3NTg3NH0.tvtGUEQYPA75nBL2KtSJSUqoWcBR5fyObFtvIydK0vc'; 
-const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-// ==========================================
-// 2. GAME DATA
+// APLIKASI OFFLINE - TIADA SUPABASE
 // ==========================================
 const gameData = {
   categories: [
@@ -40,16 +33,23 @@ const gameData = {
 let state = {
   coins: 0,
   activeCategory: "toys",
-  cart: []
+  cart: [],
+  orders: [] // Simpan order offline
 };
 
 // ==========================================
-// 3. UI FUNCTIONS
+// FUNGSI UI
 // ==========================================
-function saveGame() { localStorage.setItem('squishyGameState', JSON.stringify({ coins: state.coins })); }
+function saveGame() { 
+  localStorage.setItem('squishyGameState', JSON.stringify({ coins: state.coins, orders: state.orders })); 
+}
 function loadGame() {
   const saved = localStorage.getItem('squishyGameState');
-  if (saved) state.coins = JSON.parse(saved).coins || 0;
+  if (saved) {
+    const parsed = JSON.parse(saved);
+    state.coins = parsed.coins || 0;
+    state.orders = parsed.orders || [];
+  }
 }
 function updateHeader() {
   document.getElementById('coinDisplay').textContent = `RM ${state.coins}`;
@@ -75,7 +75,7 @@ function renderMenu() {
 window.changeCategory = function(catId) { state.activeCategory = catId; renderCategories(); renderMenu(); };
 
 // ==========================================
-// 4. CART LOGIC
+// CART LOGIC
 // ==========================================
 window.addToCart = function(itemId) {
   const item = gameData.items.find(i => i.id === itemId);
@@ -105,45 +105,35 @@ window.changeQty = function(id, change) {
 window.closeCart = function() { document.getElementById('cartDialog').close(); };
 
 // ==========================================
-// 5. PAY & SEND TO SUPABASE
+// PAY & SIMPAN ORDER (OFFLINE)
 // ==========================================
-window.payAndProcess = async function() {
+window.payAndProcess = function() {
   const buyerName = document.getElementById('buyerName').value.trim() || 'Anonymous';
   let totalPrice = 0;
   
   state.cart.forEach(item => { totalPrice += (item.price * item.qty); });
 
   const orderData = {
+    id: Date.now(),
     buyer_name: buyerName,
-    items: state.cart.map(i => ({ 
-      name: i.name, 
-      qty: i.qty, 
-      price: i.price,
-      image: i.image 
-    })),
-    total_price: totalPrice
+    items: state.cart.map(i => ({ name: i.name, qty: i.qty, price: i.price, image: i.image })),
+    total_price: totalPrice,
+    status: 'pending'
   };
 
-  try {
-    const { error } = await supabaseClient.from('orders').insert([orderData]);
-    if (error) throw error;
-
-    state.coins += totalPrice;
-    saveGame();
-    updateHeader();
-    
-    closeCart();
-    document.getElementById('menuScreen').classList.remove('active');
-    document.getElementById('successScreen').classList.add('active');
-    document.getElementById('earnedCoins').textContent = `RM ${totalPrice}`;
-    
-    state.cart = [];
-    updateHeader();
-
-  } catch (err) {
-    alert("Error sending order: " + err.message);
-    console.error(err);
-  }
+  // Simpan ke dalam array orders tempatan
+  state.orders.push(orderData);
+  state.coins += totalPrice;
+  saveGame();
+  updateHeader();
+  
+  closeCart();
+  document.getElementById('menuScreen').classList.remove('active');
+  document.getElementById('successScreen').classList.add('active');
+  document.getElementById('earnedCoins').textContent = `RM ${totalPrice}`;
+  
+  state.cart = [];
+  updateHeader();
 };
 
 window.goToMenu = function() {
@@ -160,6 +150,7 @@ function init() {
   renderCategories();
   renderMenu();
   updateHeader();
+  // (Kita kekalkan service worker, tapi tanpa Supabase)
   if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(console.error);
 }
 document.addEventListener('DOMContentLoaded', init);
