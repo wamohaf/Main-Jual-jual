@@ -140,6 +140,13 @@ body {
 }
 .add-btn:active { transform: scale(0.8); }
 
+/* BUTANG KELABU (STOK HABIS) */
+.add-btn.out-of-stock {
+  background: #ccc;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
 /* SKRIN PENJUAL (SELLER) */
 #sellerContainer {
   background: #2C2224;
@@ -163,8 +170,67 @@ body {
 .total-sales-box strong { font-size: 24px; color: #DAA520; }
 .btn-group { display: flex; gap: 8px; }
 .btn-action { border: none; padding: 10px 15px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 14px; color: white; }
-.btn-refresh { background: #007aff; }
 .btn-reset { background: #ff3b30; }
+
+/* INVENTORY LIST (RESTOCK) */
+.inventory-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+.inventory-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #3E3134;
+  padding: 10px 15px;
+  border-radius: 12px;
+  border: 1px solid #55464A;
+}
+.inv-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+}
+.inv-info img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  background: white;
+  border-radius: 8px;
+}
+.inv-action {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.stock-badge {
+  font-size: 12px;
+  font-weight: bold;
+  color: #28a745;
+}
+.stock-badge.out {
+  color: #ff3b30;
+}
+.restock-btn {
+  background: #007aff;
+  color: white;
+  border: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.restock-btn:disabled {
+  background: #555;
+  cursor: not-allowed;
+}
 
 .order-card { background: #3E3134; border-radius: 15px; padding: 15px; margin-bottom: 15px; border-left: 5px solid #FF85A2; color: white; }
 .order-card.new { border-left-color: #28a745; }

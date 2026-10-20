@@ -21,12 +21,9 @@
     </div>
     
     <div style="display: flex; gap: 8px;">
-      <!-- Butang Troli (Hanya untuk Pembeli) -->
       <button id="cartBtn" class="cart-btn" onclick="openCart()" style="position: relative; padding: 8px 12px; font-size: 20px; border-radius: 12px; border: none; background: white; cursor: pointer; box-shadow: 0 3px 0 #d15d79;">
         🛒 <span id="cartCount" class="cart-badge" style="position: absolute; top: -8px; right: -8px; background: #ff3b30; color: white; font-size: 12px; font-weight: bold; padding: 2px 6px; border-radius: 50%;">0</span>
       </button>
-
-      <!-- Butang Tukar Mode -->
       <button id="modeToggleBtn" onclick="toggleMode()" style="font-size: 13px; padding: 10px 15px; border-radius: 12px; border: none; background: white; font-weight: bold; cursor: pointer; box-shadow: 0 3px 0 #d15d79;">
         👤 Buyer
       </button>
@@ -63,11 +60,15 @@
           <strong id="totalSalesDisplay">RM 0</strong>
         </div>
         <div class="btn-group">
-          <button class="btn-action btn-refresh" onclick="fetchOrders()">🔄 Refresh</button>
           <button class="btn-action btn-reset" onclick="resetAllOrders()">🗑️ Reset</button>
         </div>
       </div>
-      <h1 style="color: #FF85A2; text-align: center; font-size: 20px; margin-top: 10px;">🛒 Main Jual-jual (Seller)</h1>
+      
+      <!-- BAHAGIAN INVENTORI (BARU) -->
+      <h2 style="color: #FF85A2; text-align: center; font-size: 18px; margin: 15px 0 10px 0;">📦 Restock Items</h2>
+      <div id="inventoryList" class="inventory-list"></div>
+
+      <h2 style="color: #FF85A2; text-align: center; font-size: 20px; margin: 25px 0 10px 0;">🛒 Orders</h2>
       <div id="ordersList">
         <p class="empty">Waiting for orders...</p>
       </div>
