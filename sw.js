@@ -1,4 +1,4 @@
-const CACHE = 'main-jual-jual-v3.4';
+const CACHE = 'main-jual-jual-v3.5';
 const CORE = [
   '/',
   '/index.html',
