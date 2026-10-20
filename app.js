@@ -70,7 +70,20 @@ function renderCategories() {
   document.getElementById('categoryTabs').innerHTML = gameData.categories.map(cat => `
     <button class="cat-btn ${state.activeCategory === cat.id ? 'active' : ''}" onclick="changeCategory('${cat.id}')">${cat.name}</button>
   `).join('');
+  
+  // Update tajuk secara automatik
+  const titleEl = document.getElementById('shopTitle');
+  const subtitleEl = document.getElementById('shopSubtitle');
+  const currentCat = gameData.categories.find(c => c.id === state.activeCategory);
+  
+  if (currentCat) {
+    // Ambil nama kategori, buang emoji (contoh: "🧸 Squishy" jadi "Squishy")
+    const catName = currentCat.name.replace(/[^\w\s]/gi, '').trim(); 
+    titleEl.textContent = `Choose ${catName}`;
+    subtitleEl.textContent = `Tap + to add ${catName.toLowerCase()} to cart`;
+  }
 }
+
 function renderMenu() {
   const items = gameData.items.filter(i => i.cat === state.activeCategory);
   document.getElementById('menuGrid').innerHTML = items.map(item => `
@@ -138,7 +151,6 @@ window.payAndProcess = function() {
   
   closeCart();
   
-  // Sembunyikan menu, tunjuk skrin berjaya
   document.getElementById('menuScreen').style.display = 'none';
   document.getElementById('successScreen').style.display = 'block';
   document.getElementById('earnedCoins').textContent = `RM ${totalPrice}`;
@@ -177,7 +189,7 @@ window.toggleMode = function() {
     toggleBtn.innerHTML = '🛒 Seller';
     toggleBtn.style.background = '#FF85A2'; 
     toggleBtn.style.color = 'white';
-    cartBtn.style.display = 'none'; // Sembunyikan butang troli di mode penjual
+    cartBtn.style.display = 'none'; 
     fetchOrders(); 
   } else {
     sellerDiv.style.display = 'none';
@@ -185,7 +197,7 @@ window.toggleMode = function() {
     toggleBtn.innerHTML = '👤 Buyer';
     toggleBtn.style.background = 'white';
     toggleBtn.style.color = 'black';
-    cartBtn.style.display = 'block'; // Tunjuk butang troli di mode pembeli
+    cartBtn.style.display = 'block'; 
     renderMenu(); 
   }
   updateHeader();
