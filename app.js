@@ -42,11 +42,10 @@ let state = {
 // SIMPAN & MUAT DATA
 // ==========================================
 function saveGame() { 
-  // Simpan coins, orders, DAN stok barang terkini
   localStorage.setItem('mainJualJualData', JSON.stringify({ 
     coins: state.coins, 
     orders: state.orders,
-    items: gameData.items // <-- Simpan stok
+    items: gameData.items
   })); 
 }
 
@@ -56,7 +55,6 @@ function loadGame() {
     const parsed = JSON.parse(saved);
     state.coins = parsed.coins || 0;
     state.orders = parsed.orders || [];
-    // Load balik stok dari memori
     if (parsed.items) {
       parsed.items.forEach(savedItem => {
         const currentItem = gameData.items.find(i => i.id === savedItem.id);
@@ -99,7 +97,6 @@ function renderMenu() {
   const items = gameData.items.filter(i => i.cat === state.activeCategory);
   
   document.getElementById('menuGrid').innerHTML = items.map(item => {
-    // Semak stok: Jika 0, butang jadi disable
     const isOutOfStock = item.stock <= 0;
     const btnClass = isOutOfStock ? 'add-btn out-of-stock' : 'add-btn';
     const btnDisabled = isOutOfStock ? 'disabled' : '';
@@ -121,7 +118,7 @@ window.changeCategory = function(catId) { state.activeCategory = catId; renderCa
 // ==========================================
 window.addToCart = function(itemId) {
   const item = gameData.items.find(i => i.id === itemId);
-  if (!item || item.stock <= 0) return; // Jangan tambah kalau stok habis
+  if (!item || item.stock <= 0) return;
 
   const existing = state.cart.find(i => i.id === itemId);
   if (existing) {
@@ -131,7 +128,7 @@ window.addToCart = function(itemId) {
   }
   
   updateHeader();
-  renderMenu(); // Refresh menu untuk update butang kelabu
+  renderMenu();
 };
 
 window.openCart = function() {
@@ -165,7 +162,6 @@ window.payAndProcess = function() {
   
   state.cart.forEach(item => { 
     totalPrice += (item.price * item.qty); 
-    // Tolak stok dari gameData asal
     const originalItem = gameData.items.find(i => i.id === item.id);
     if (originalItem) originalItem.stock -= item.qty;
   });
@@ -224,8 +220,10 @@ window.toggleMode = function() {
     toggleBtn.style.background = '#FF85A2'; 
     toggleBtn.style.color = 'white';
     cartBtn.style.display = 'none'; 
+    
+    // Panggil kedua-dua fungsi untuk papar pesanan & stok
     fetchOrders(); 
-    renderInventory(); // Panggil fungsi inventori
+    renderInventory(); 
   } else {
     sellerDiv.style.display = 'none';
     buyerDiv.style.display = 'block';
@@ -239,7 +237,7 @@ window.toggleMode = function() {
 };
 
 // ==========================================
-// LOGIK PENJUAL
+// LOGIK PENJUAL (INVENTORY & ORDERS)
 // ==========================================
 window.renderInventory = function() {
   const invList = document.getElementById('inventoryList');
@@ -266,7 +264,7 @@ window.restockItem = function(itemId) {
     item.stock += 1;
     saveGame();
     renderInventory();
-    renderMenu(); // Update skrin pembeli juga
+    renderMenu(); 
   }
 };
 
