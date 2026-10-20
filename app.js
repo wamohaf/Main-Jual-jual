@@ -1,5 +1,5 @@
 // ==========================================
-// APLIKASI OFFLINE - TIADA SUPABASE
+// GAME DATA
 // ==========================================
 const gameData = {
   categories: [
@@ -34,27 +34,39 @@ let state = {
   coins: 0,
   activeCategory: "toys",
   cart: [],
-  orders: [] // Simpan order offline
+  orders: [], // Senarai pesanan
+  isSellerMode: false
 };
 
 // ==========================================
-// FUNGSI UI
+// SIMPAN & MUAT DATA (localStorage)
 // ==========================================
 function saveGame() { 
-  localStorage.setItem('squishyGameState', JSON.stringify({ coins: state.coins, orders: state.orders })); 
+  localStorage.setItem('mainJualJualData', JSON.stringify({ coins: state.coins, orders: state.orders })); 
 }
 function loadGame() {
-  const saved = localStorage.getItem('squishyGameState');
+  const saved = localStorage.getItem('mainJualJualData');
   if (saved) {
     const parsed = JSON.parse(saved);
     state.coins = parsed.coins || 0;
     state.orders = parsed.orders || [];
   }
 }
+
+// ==========================================
+// UI FUNCTIONS
+// ==========================================
 function updateHeader() {
   document.getElementById('coinDisplay').textContent = `RM ${state.coins}`;
   const totalCartCount = state.cart.reduce((sum, item) => sum + item.qty, 0);
-  document.getElementById('cartCount').textContent = totalCartCount;
+  // Kalau takde cart badge, kita buat sendiri
+  const cartBtn = document.getElementById('modeToggleBtn');
+  if(cartBtn) {
+      // Update total sales untuk seller
+      const totalSales = state.orders.filter(o => o.status === 'done').reduce((sum, o) => sum + o.total_price, 0);
+      const tSalesEl = document.getElementById('totalSalesDisplay');
+      if(tSalesEl) tSalesEl.textContent = `RM ${totalSales}`;
+  }
 }
 function renderCategories() {
   document.getElementById('categoryTabs').innerHTML = gameData.categories.map(cat => `
@@ -75,7 +87,7 @@ function renderMenu() {
 window.changeCategory = function(catId) { state.activeCategory = catId; renderCategories(); renderMenu(); };
 
 // ==========================================
-// CART LOGIC
+// CART LOGIC (PEMBELI)
 // ==========================================
 window.addToCart = function(itemId) {
   const item = gameData.items.find(i => i.id === itemId);
@@ -105,7 +117,7 @@ window.changeQty = function(id, change) {
 window.closeCart = function() { document.getElementById('cartDialog').close(); };
 
 // ==========================================
-// PAY & SIMPAN ORDER (OFFLINE)
+// PROSES BAYAR (PEMBELI -> PENJUAL)
 // ==========================================
 window.payAndProcess = function() {
   const buyerName = document.getElementById('buyerName').value.trim() || 'Anonymous';
@@ -121,17 +133,20 @@ window.payAndProcess = function() {
     status: 'pending'
   };
 
-  // Simpan ke dalam array orders tempatan
+  // Simpan pesanan
   state.orders.push(orderData);
   state.coins += totalPrice;
   saveGame();
   updateHeader();
   
   closeCart();
+  
+  // Tukar ke skrin berjaya
   document.getElementById('menuScreen').classList.remove('active');
   document.getElementById('successScreen').classList.add('active');
   document.getElementById('earnedCoins').textContent = `RM ${totalPrice}`;
   
+  // Kosongkan cart
   state.cart = [];
   updateHeader();
 };
@@ -142,15 +157,120 @@ window.goToMenu = function() {
   renderMenu();
 };
 window.resetCoins = function() {
-  if (confirm("Reset your money to RM 0?")) { state.coins = 0; saveGame(); updateHeader(); }
+  if (confirm("Reset your money to RM 0?")) { 
+    state.coins = 0; 
+    saveGame(); 
+    updateHeader(); 
+    alert("Money reset!");
+  }
 };
 
+// ==========================================
+// TUKAR MODE (PEMBELI / PENJUAL)
+// ==========================================
+window.toggleMode = function() {
+  state.isSellerMode = !state.isSellerMode;
+  
+  const buyerDiv = document.getElementById('buyerContainer');
+  const sellerDiv = document.getElementById('sellerContainer');
+  const toggleBtn = document.getElementById('modeToggleBtn');
+  const cartBtn = document.getElementById('cartBtn');
+
+  if (state.isSellerMode) {
+    buyerDiv.style.display = 'none';
+    sellerDiv.style.display = 'block';
+    toggleBtn.innerHTML = '🛒 Seller Mode';
+    toggleBtn.style.background = '#FF85A2'; 
+    fetchOrders(); // Tarik pesanan
+  } else {
+    sellerDiv.style.display = 'none';
+    buyerDiv.style.display = 'block';
+    toggleBtn.innerHTML = '👤 Buyer Mode';
+    toggleBtn.style.background = 'white';
+    renderMenu(); // Refresh menu pembeli
+  }
+  updateHeader();
+};
+
+// ==========================================
+// LOGIK PENJUAL (SELLER)
+// ==========================================
+window.fetchOrders = function() {
+  const ordersList = document.getElementById('ordersList');
+  
+  // Kira total sales (hanya yang berstatus 'done')
+  const totalSales = state.orders
+    .filter(order => order.status === 'done')
+    .reduce((sum, order) => sum + order.total_price, 0);
+  
+  document.getElementById('totalSalesDisplay').textContent = `RM ${totalSales}`;
+
+  if (state.orders.length === 0) {
+    ordersList.innerHTML = '<p class="empty" style="text-align: center; color: gray; margin-top: 50px;">No orders yet.</p>';
+    return;
+  }
+
+  // Tunjuk order terbaru dahulu
+  const sortedOrders = [...state.orders].reverse();
+
+  ordersList.innerHTML = sortedOrders.map(order => {
+    const isDone = order.status === 'done';
+    const itemsHtml = order.items.map(i => {
+      const imgSrc = i.image ? i.image : 'https://via.placeholder.com/45?text=?';
+      return `
+        <div class="order-item">
+          <img src="${imgSrc}" alt="${i.name}">
+          <div class="order-item-info">
+            <div class="order-item-name">${i.name}</div>
+            <div class="order-item-qty">Qty: ${i.qty} | Price: RM ${i.price}</div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    return `
+      <div class="order-card ${isDone ? '' : 'new'}">
+        <div class="buyer-name">👤 ${order.buyer_name}</div>
+        <div class="order-items-container">
+          ${itemsHtml}
+        </div>
+        <div class="total">Total: RM ${order.total_price}</div>
+        <button class="status-btn ${isDone ? 'done' : ''}" onclick="markDone(${order.id})" ${isDone ? 'disabled' : ''}>
+          ${isDone ? '✅ Completed' : 'Mark as Done'}
+        </button>
+      </div>
+    `;
+  }).join('');
+};
+
+window.markDone = function(orderId) {
+  const order = state.orders.find(o => o.id === orderId);
+  if (order) {
+    order.status = 'done';
+    saveGame();
+    fetchOrders(); // Refresh skrin
+  }
+};
+
+window.resetAllOrders = function() {
+  if (!confirm("Delete all orders and reset sales?")) return;
+  state.orders = [];
+  saveGame();
+  fetchOrders();
+};
+
+// ==========================================
+// INITIALIZATION
+// ==========================================
 function init() {
   loadGame();
   renderCategories();
   renderMenu();
   updateHeader();
-  // (Kita kekalkan service worker, tapi tanpa Supabase)
-  if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(console.error);
+  
+  // Daftar Service Worker (PWA)
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js').catch(console.error);
+  }
 }
 document.addEventListener('DOMContentLoaded', init);
